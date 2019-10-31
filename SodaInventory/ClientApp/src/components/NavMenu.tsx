@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import './NavMenu.css';
+import '../css/NavMenu.css';
 
 export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }> {
     public state = {
@@ -29,6 +29,9 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/fetch-data">Manage Users</NavLink>
 								</NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/" onClick={this.logout}>Logout</NavLink>
+								</NavItem>
                             </ul>
                         </Collapse>
                     </Container>
@@ -36,6 +39,10 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
             </header>
         );
     }
+
+    private logout = () => {
+        sessionStorage.clear();
+    };
 
     private toggle = () => {
         this.setState({
