@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 class Home extends React.Component {
 
     componentDidMount(): void {
-        console.log("test");
+        if(window.location.pathname+window.location.search !== '/') {
+            window.location.href='/'
+        }
     }
 
     render() {
