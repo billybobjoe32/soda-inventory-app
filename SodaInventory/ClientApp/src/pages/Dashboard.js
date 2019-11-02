@@ -1,6 +1,17 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {GridRow, Header, Icon, Segment, Tab} from "semantic-ui-react";
+import {
+    GridRow,
+    Header,
+    Icon,
+    Segment,
+    Tab,
+    Table,
+    TableBody, TableCell,
+    TableHeader,
+    TableHeaderCell,
+    TableRow
+} from "semantic-ui-react";
 import {Component} from "react";
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 
@@ -11,6 +22,9 @@ class Dashboard extends Component {
         this.state = {
             colors: ['red', 'yellow', 'green'],
             currentIndexColor: 'red',
+            urgent: [{item: "napkins", qty: 5},{item: "cups", qty: 10},{item: "spoons", qty: 50}],
+            moderate: [{item: "paper", qty: 5},{item: "containers", qty: 10}],
+            good: [{item: "drinks", qty: 1000}],
         }
     }
 
@@ -24,19 +38,60 @@ class Dashboard extends Component {
         this.setState({currentIndexColor: this.state.colors[data.activeIndex]});
     };
 
+    createRows = (data) => {
+        let cells = [];
+        data.forEach((element) => {
+            cells.push(
+                <TableRow>
+                    <TableCell>{element.item}</TableCell>
+                    <TableCell>{element.qty}</TableCell>
+                </TableRow>
+            );
+        });
+
+        return cells;
+    };
+
+
     render() {
+        let tableHeader = <TableHeader>
+            <TableRow>
+                <TableHeaderCell>Item</TableHeaderCell>
+                <TableHeaderCell>Qty</TableHeaderCell>
+            </TableRow>
+        </TableHeader>;
+
         const panes = [
             {
                 menuItem: {key: 'urgent', icon: 'warning circle', content: 'Urgent'},
-                render: () => <Header as='h3'>Tab 1 Content</Header>
+                render: () =>
+                    <Table celled>
+                        {tableHeader}
+                        <TableBody>
+                            {this.createRows(this.state.urgent)}
+                        </TableBody>
+                    </Table>
+
             },
             {
                 menuItem: {key: 'moderate', icon: 'warning sign', content: 'Moderate'},
-                render: () => <Header as='h3'>Tab 2 Content</Header>
+                render: () =>
+                    <Table celled>
+                        {tableHeader}
+                        <TableBody>
+                            {this.createRows(this.state.moderate)}
+                        </TableBody>
+                    </Table>
             },
             {
                 menuItem: {key: 'good', icon: 'checkmark', content: 'Good'},
-                render: () => <Header as='h3'>Tab 3 Content</Header>
+                render: () =>
+                    <Table celled>
+                        {tableHeader}
+                        <TableBody>
+                            {this.createRows(this.state.good)}
+                        </TableBody>
+                    </Table>
             }
         ];
 
@@ -48,7 +103,8 @@ class Dashboard extends Component {
                     <Header as='h3'>
                         <Icon name='clipboard list' circular/>
                         <Header.Content>Inventory Quantities
-                            <Header.Subheader style={{color: 'red'}}>Inventory levels as of November 1st, 2019</Header.Subheader>
+                            <Header.Subheader style={{color: 'red'}}>Inventory levels as of November 1st,
+                                2019</Header.Subheader>
                         </Header.Content>
                     </Header>
                     <Grid columns={1}>
