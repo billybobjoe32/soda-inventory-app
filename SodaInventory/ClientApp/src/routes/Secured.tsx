@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PrivateRoute from '../hoc/PrivateRoute';
-import Home from "../pages/Home";
+import Home from "../pages/Dashboard";
 import {Switch} from "react-router";
 import NavMenu from "../components/NavMenu";
 
