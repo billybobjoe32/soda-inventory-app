@@ -23,6 +23,7 @@ import {
     XAxis,
     YAxis
 } from "recharts";
+import QuantityModal from "./QuantityModal";
 
 class ItemModal extends Component {
 
@@ -32,8 +33,13 @@ class ItemModal extends Component {
             item: "cups",
             qty: 10,
             uom: "units",
+            showAdjustInventoryModal: false,
         };
     }
+
+    closeModal = () => {
+        this.setState({showAdjustInventoryModal: false});
+    };
 
     render() {
 
@@ -53,6 +59,7 @@ class ItemModal extends Component {
 
         return (
             <div>
+                <QuantityModal showModal={this.state.showAdjustInventoryModal} closeModal={this.closeModal} />
                 <Modal open={this.props.showModal} onClose={this.props.closeModal} size={'large'} closeIcon>
                     <ModalHeader>Item</ModalHeader>
                     <ModalContent scrolling>
@@ -87,7 +94,7 @@ class ItemModal extends Component {
                     </ModalContent>
                     <ModalActions>
                         <Button primary>Edit Item Details<Icon className="pl-3" name='pencil alternate'/></Button>
-                        <Button secondary>Adjust Inventory<Icon name='chevron right'/></Button>
+                        <Button secondary onClick={() => this.setState({showAdjustInventoryModal: true})}>Adjust Inventory<Icon name='chevron right'/></Button>
                     </ModalActions>
                 </Modal>
             </div>
