@@ -42,7 +42,7 @@ class ItemModal extends Component {
 
         return (
             <div>
-                <Modal open={this.props.showModal} onClose={this.props.closeModal} size={'large'} closeIcon id="itemModal">
+                <Modal open={this.props.showModal} onClose={this.props.closeModal} size={'large'} closeIcon>
                     <ModalHeader>Item</ModalHeader>
                     <ModalContent scrolling>
                         <Header as='h2'>

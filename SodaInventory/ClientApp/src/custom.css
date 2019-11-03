@@ -1,25 +1,43 @@
 /* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
+    color: #0366d6;
 }
 
 code {
-  color: #E01A76;
+    color: #E01A76;
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
 .visible.transition {
-  margin: auto !important;
-  display: inline-block !important;
-  position: relative;
+    margin: auto !important;
+    display: inline-block !important;
+    position: relative;
 }
 
 .ui.modal .scrolling.content {
-  max-height: calc(100vh - 10em);
-  overflow: auto;
+    max-height: calc(110vh - 10em);
+    overflow: auto;
+}
+
+@media only screen and (max-width: 767px) {
+    .ui.large.modal {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+  .ui.dimmer  {
+        padding: 0;
+    }
+}
+
+.ui.modal>.close {
+  top: 1rem;
+  right: 1rem;
+  color: #777777;
 }
