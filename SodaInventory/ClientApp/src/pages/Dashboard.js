@@ -1,19 +1,20 @@
 import * as React from 'react';
+import {Component} from 'react';
 import {connect} from 'react-redux';
 import {
-    GridRow,
     Header,
     Icon,
     Segment,
     Tab,
     Table,
-    TableBody, TableCell,
+    TableBody,
+    TableCell,
     TableHeader,
     TableHeaderCell,
     TableRow
 } from "semantic-ui-react";
-import {Component} from "react";
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
+import ItemModal from "./ItemModal";
 
 class Dashboard extends Component {
 
@@ -22,9 +23,10 @@ class Dashboard extends Component {
         this.state = {
             colors: ['red', 'yellow', 'green'],
             currentIndexColor: 'red',
-            urgent: [{item: "napkins", qty: 5},{item: "cups", qty: 10},{item: "spoons", qty: 50}],
-            moderate: [{item: "paper", qty: 5},{item: "containers", qty: 10}],
-            good: [{item: "drinks", qty: 1000}],
+            showItemModal: false,
+            urgent: [{id: 1, item: "napkins", qty: 5}, {id: 2, item: "cups", qty: 10}, {id: 3, item: "spoons", qty: 50}],
+            moderate: [{id: 4, item: "paper", qty: 5}, {id: 5, item: "containers", qty: 10}],
+            good: [{id: 6, item: "drinks", qty: 1000}],
         }
     }
 
@@ -38,11 +40,15 @@ class Dashboard extends Component {
         this.setState({currentIndexColor: this.state.colors[data.activeIndex]});
     };
 
+    closeModal = () => {
+        this.setState({showItemModal: false});
+    };
+
     createRows = (data) => {
         let cells = [];
         data.forEach((element) => {
             cells.push(
-                <TableRow>
+                <TableRow key={element.id} onClick={() => this.setState({showItemModal: true})}>
                     <TableCell>{element.item}</TableCell>
                     <TableCell>{element.qty}</TableCell>
                 </TableRow>
@@ -54,18 +60,19 @@ class Dashboard extends Component {
 
 
     render() {
-        let tableHeader = <TableHeader>
-            <TableRow>
-                <TableHeaderCell>Item</TableHeaderCell>
-                <TableHeaderCell>Qty</TableHeaderCell>
-            </TableRow>
-        </TableHeader>;
+        let tableHeader =
+            <TableHeader>
+                <TableRow>
+                    <TableHeaderCell>Item</TableHeaderCell>
+                    <TableHeaderCell>Qty</TableHeaderCell>
+                </TableRow>
+            </TableHeader>;
 
         const panes = [
             {
                 menuItem: {key: 'urgent', icon: 'warning circle', content: 'Urgent'},
                 render: () =>
-                    <Table celled>
+                    <Table celled selectable>
                         {tableHeader}
                         <TableBody>
                             {this.createRows(this.state.urgent)}
@@ -98,6 +105,7 @@ class Dashboard extends Component {
         const color = this.state.currentIndexColor;
         return (
             <div>
+                <ItemModal showModal={this.state.showItemModal} closeModal={this.closeModal} />
                 <Header as='h2' attached='top'>Dashboard</Header>
                 <Segment attached>
                     <Header as='h3'>
