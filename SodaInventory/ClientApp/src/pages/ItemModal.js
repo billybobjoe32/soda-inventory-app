@@ -1,5 +1,16 @@
 import React, {Component} from 'react';
-import {Header, Icon, Message, MessageHeader, Modal, ModalContent, ModalHeader, Segment} from "semantic-ui-react";
+import {
+    Button,
+    Header,
+    Icon,
+    Message,
+    MessageHeader,
+    Modal,
+    ModalActions,
+    ModalContent,
+    ModalHeader,
+    Segment
+} from "semantic-ui-react";
 import PropTypes from 'prop-types';
 import {
     Bar,
@@ -37,7 +48,7 @@ class ItemModal extends Component {
             {month: "Sept", value: 108},
             {month: "Oct", value: 120},
             {month: "Nov", value: 256},
-            {month: "Dec", value: 170},
+            {month: "Dec", value: 90},
         ];
 
         return (
@@ -47,7 +58,7 @@ class ItemModal extends Component {
                     <ModalContent scrolling>
                         <Header as='h2'>
                             <Icon name='box' circular/>
-                            <Header.Content>Cups - <span style={{fontStyle: 'italic'}}>10 Units</span>
+                            <Header.Content>Cups - <span style={{fontStyle: 'italic'}}>10 Units in stock</span>
                                 <Header.Subheader>
                                     Level: <span style={{color: 'red'}}>Urgent</span>
                                 </Header.Subheader>
@@ -58,8 +69,8 @@ class ItemModal extends Component {
                                 <MessageHeader>Suggested Action</MessageHeader>
                                 Swap  <Icon name="long arrow alternate right"/>Gilbert
                             </Message>
-                            <Message size="small">10 units</Message>
-                            <ResponsiveContainer width="99%" height={430}>
+                            <Message size="small">10 units short</Message>
+                            <ResponsiveContainer width="99%" height={440}>
                             <BarChart data={data}
                                       margin={{top: 5, right: 70, left: 10, bottom: 5}}>
                                 <CartesianGrid strokeDasharray="3 3"/>
@@ -67,12 +78,17 @@ class ItemModal extends Component {
                                 <YAxis/>
                                 <Tooltip/>
                                 <Legend/>
-                                <Bar dataKey="value" fill="#26BFE7"/>
-                                <ReferenceLine y={100} stroke="red" label={{ position: 'right',  value: 'Threshold', fill: 'red', fontSize: 14 }}/>
+                                <Bar dataKey="value" fill="#26BFE7" name="Inventory"/>
+                                <ReferenceLine y={120} stroke="orange" label={{ position: 'right',  value: '120', fill: 'orange', fontSize: 14 }}/>
+                                <ReferenceLine y={100} stroke="red" label={{ position: 'right',  value: '100', fill: 'red', fontSize: 14 }}/>
                             </BarChart>
                             </ResponsiveContainer>
                         </Segment>
                     </ModalContent>
+                    <ModalActions>
+                        <Button primary>Edit Item Details<Icon className="pl-3" name='pencil alternate'/></Button>
+                        <Button secondary>Adjust Inventory<Icon name='chevron right'/></Button>
+                    </ModalActions>
                 </Modal>
             </div>
         );

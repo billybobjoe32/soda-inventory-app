@@ -7,10 +7,22 @@ code {
     color: #E01A76;
 }
 
-.btn-primary {
+.ui.primary.button {
     color: #fff;
     background-color: #1b6ec2;
     border-color: #1861ac;
+}
+
+.ui.secondary.button {
+    color: #fff;
+    background-color: #00b308;
+    border-color: #09bd00;
+}
+.ui.secondary.button:hover {
+    background-color: #00c308;
+}
+.ui.secondary.button:focus {
+    background-color: #00b308;
 }
 
 .visible.transition {
@@ -20,7 +32,7 @@ code {
 }
 
 .ui.modal .scrolling.content {
-    max-height: calc(110vh - 10em);
+    max-height: calc(100vh - 10em);
     overflow: auto;
 }
 
@@ -28,11 +40,18 @@ code {
     .ui.large.modal {
         width: 100%;
     }
-}
-
-@media only screen and (max-width: 767px) {
-  .ui.dimmer  {
+    .ui.dimmer  {
         padding: 0;
+    }
+
+    .ui.modal .scrolling.content {
+        max-height: calc(110vh - 10em);
+        overflow: auto;
+    }
+
+    .ui.modal>.actions {
+        display: flex;
+        justify-content: space-between;
     }
 }
 
@@ -40,4 +59,10 @@ code {
   top: 1rem;
   right: 1rem;
   color: #777777;
+}
+
+.ui.modal>.actions {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
 }
