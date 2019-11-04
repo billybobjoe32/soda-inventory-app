@@ -2,7 +2,7 @@
 
 namespace DatabaseDAL
 {
-	public partial class DBDAL
+	public class AuthorizationDAL : DBDAL
 	{
 		public static bool IsAuthorized(string user)
 		{
