@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import PrivateRoute from '../hoc/PrivateRoute';
-import Home from "../pages/Home";
 import {Switch} from "react-router";
 import NavMenu from "../components/NavMenu";
+import Dashboard from "../pages/Dashboard";
 
 class Secured extends Component {
     render() {
@@ -10,7 +10,7 @@ class Secured extends Component {
             <div>
                 <NavMenu/>
                 <Switch>
-                    <PrivateRoute path='/*' component={Home}/>
+                    <PrivateRoute path='/*' component={Dashboard}/>
                 </Switch>
             </div>
         );
