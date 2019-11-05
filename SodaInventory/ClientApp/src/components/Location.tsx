@@ -28,7 +28,7 @@ class Counter extends React.PureComponent<LocationProps>{
                             </Link>
                         )}
 
-                            <Link to='/add-store' className="btn btn-primary btn-lg">Add Store</Link>
+                        <Link to='/add-store' className="btn btn-primary btn-lg">Add Store</Link>
                     </Grid.Column>
                 </Grid>
 
