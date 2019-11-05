@@ -1,10 +1,12 @@
 import * as WeatherForecasts from './WeatherForecasts';
 import * as Counter from './Counter';
 import * as Location from './Location';
+import * as Inventory from './Inventory';
 
 // The top-level state object
 export interface ApplicationState {
     locations: Location.LocationState | undefined;
+    items: Inventory.InventoryState | undefined;
     counter: Counter.CounterState | undefined;
     weatherForecasts: WeatherForecasts.WeatherForecastsState | undefined;
 }
@@ -14,6 +16,7 @@ export interface ApplicationState {
 // acts on the corresponding ApplicationState property type.
 export const reducers = {
     locations: Location.reducer,
+    items: Inventory.reducer,
     counter: Counter.reducer,
     weatherForecasts: WeatherForecasts.reducer
 };
