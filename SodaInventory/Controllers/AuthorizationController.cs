@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace SodaInventory.Controllers
 {
 	[ApiController]
-	[Route("[api]")]
+	[Route("api/[controller]")]
 	public class AuthorizationController : ControllerBase
 	{
 		private readonly ILogger<AuthorizationController> _logger;
@@ -19,18 +19,23 @@ namespace SodaInventory.Controllers
 		}
 
 		[HttpGet]
-		public HttpResponseMessage GetAuthorization(string userName)
+		public HttpResponseMessage Get(string userName, bool isAuthorized = true)
 		{
-			bool isAuthorized = true;
+			HttpResponseMessage response = new HttpResponseMessage();
+			string userLevel = "Admin";
+			//bool isAuthorized = true;
 			if(isAuthorized)
 			{
 				_logger.LogInformation(userName + " is now logged in");
-				return new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+				response.StatusCode = System.Net.HttpStatusCode.OK;
+				response.Content = new StringContent("UserLevel: " + userLevel);
+				return response;
 			}
 			else
 			{
-				_logger.LogInformation(userName + " is an unauthorized user that tried to log in.");
-				return new HttpResponseMessage(System.Net.HttpStatusCode.Unauthorized);
+				_logger.LogWarning(userName + " is an unauthorized user that tried to log in.");
+				response.StatusCode = System.Net.HttpStatusCode.Unauthorized;
+				return response;
 			}
 		}
 	}
