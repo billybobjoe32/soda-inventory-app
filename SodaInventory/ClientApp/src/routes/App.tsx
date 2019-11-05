@@ -18,7 +18,7 @@ class App extends Component {
 
                             {/* I added this to the rout switch for accessability */}
                             <Route exact path="/AddItem" component={AddItem}/>
-                            
+
                             <Route exact path="/*" component={LoggedIn}/>
                         </Switch>
                     </div>

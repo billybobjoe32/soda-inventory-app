@@ -72,3 +72,11 @@ code {
     position: absolute;
     width: 100%;
 }
+
+#addForm {
+    text-align: center;
+}
+
+#storeSelect {
+    text-align: center;
+}

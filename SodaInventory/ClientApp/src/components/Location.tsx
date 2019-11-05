@@ -4,6 +4,7 @@ import { RouteComponentProps } from 'react-router';
 import { ApplicationState } from '../store';
 import { Link } from 'react-router-dom';
 import * as LocationStore from '../store/Location';
+import { Grid } from 'semantic-ui-react';
 
 type LocationProps =
     LocationStore.LocationState &
@@ -14,17 +15,23 @@ class Counter extends React.PureComponent<LocationProps>{
     public render() {
         return (
             <React.Fragment>
-                <h1>Select Store</h1>
+                <Grid textAlign="center" verticalAlign="middle">
+                    <Grid.Column style={{ width: '100%', maxWidth: 850 }}>
+                        <h1 style={{ marginBottom: 20 }}>Select Store</h1>
 
-                <p>This is the list of store locations</p>
+                        <div className="ui section divider" />
 
-                <ul>
-                    {this.props.locations.map((location: LocationStore.Location) =>
-                        <li key={location.id}>{location.name}</li>
-                    )}
-                </ul>
+                        {this.props.locations.map((location: LocationStore.Location) =>
+                            <Link to='/'>
+                                <h3 key={location.id}>{location.name}</h3>
+                                <div className="ui section divider" />
+                            </Link>
+                        )}
 
-                <Link to='/add-store' className="btn btn-primary btn-lg">Add Store</Link>
+                            <Link to='/add-store' className="btn btn-primary btn-lg">Add Store</Link>
+                    </Grid.Column>
+                </Grid>
+
             </React.Fragment>
         );
     }

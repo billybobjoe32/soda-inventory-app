@@ -4,6 +4,7 @@ import { RouteComponentProps } from 'react-router';
 import { ApplicationState } from '../store';
 import { Link } from 'react-router-dom';
 import * as LocationStore from '../store/Location';
+import { Form, Grid } from 'semantic-ui-react';
 
 type LocationProps =
     LocationStore.AddLocationAction &
@@ -20,35 +21,40 @@ class AddLocation extends React.PureComponent<LocationProps> {
 
         return (
             <React.Fragment>
-                <h1>Add Store</h1>
+                <Grid textAlign='center' style={{ height: '50vh' }} verticalAlign='middle' >
+                    <Grid.Column style={{width: '70%', maxWidth: 450}}>
+                        <h1 style={{marginBottom: 20}}>Add Store</h1>
 
-                <p>This is a form to add a new store</p>
-                <div className="form-fields">
-                    <label htmlFor='store-name'>Store Name:</label>
-                    <input id='store-name' value={name} onChange={(e) => name = e.target.value} />
-                </div>
-                <div className="form-fields">
-                    <label htmlFor='street'>Street:</label>
-                    <input id='street' value={street} onChange={(e) => street = e.target.value}/>
-                </div>
-                <div className="form-fields">
-                    <label htmlFor='city'>City:</label>
-                    <input id='city' value={city} onChange={(e) => city = e.target.value}/>
-                </div>
-                <div className="form-fields">
-                    <label htmlFor='state'>State:</label>
-                    <input id='state' value={state} onChange={(e) => state = e.target.value}/>
-                </div>
-                <div className="form-fields">
-                    <label htmlFor='zip'>ZIP:</label>
-                    <input id='zip' value={zip} onChange={(e) => zip = e.target.value}/>
-                </div>
+                        <Form>
+                            <Form.Field>
+                                <label htmlFor='store-name' style={{textAlign: 'left'}}>Store Name:</label>
+                                <input id='store-name' value={name} onChange={(e) => name = e.target.value} />
+                            </Form.Field>
+                            <Form.Field>
+                                <label htmlFor='street' style={{ textAlign: 'left' }}>Street:</label>
+                                <input id='street' value={street} onChange={(e) => street = e.target.value}/>
+                            </Form.Field>
+                            <Form.Field>
+                                <label htmlFor='city' style={{ textAlign: 'left' }}>City:</label>
+                                <input id='city' value={city} onChange={(e) => city = e.target.value}/>
+                            </Form.Field>
+                            <Form.Field>
+                                <label htmlFor='state' style={{ textAlign: 'left' }}>State:</label>
+                                <input id='state' value={state} onChange={(e) => state = e.target.value}/>
+                            </Form.Field>
+                            <Form.Field>
+                                <label htmlFor='zip' style={{ textAlign: 'left' }}>ZIP:</label>
+                                <input id='zip' value={zip} onChange={(e) => zip = e.target.value}/>
+                            </Form.Field>
 
-                <Link type="submit" className="btn btn-primary btn-lg" to='/select-store' onClick={() => {
-                    this.props.addLocation(name, street, city, state, zip);
-                }}>
-                    Add Location
-                </Link>
+                            <Link className="btn btn-primary btn-lg" to='/select-store' onClick={() => {
+                                this.props.addLocation(name, street, city, state, zip);
+                            }}>
+                                Add Location
+                            </Link>
+                        </Form>
+                    </Grid.Column>
+                </Grid>
             </React.Fragment>
         );
     }
