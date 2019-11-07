@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
-import { ApplicationState } from '../store';
-import { Link } from 'react-router-dom';
+import {connect} from 'react-redux';
+import {RouteComponentProps} from 'react-router';
+import {ApplicationState} from '../store';
+import {Link} from 'react-router-dom';
 import * as LocationStore from '../store/Location';
-import { Grid } from 'semantic-ui-react';
+import {Grid} from 'semantic-ui-react';
 
 type LocationProps =
     LocationStore.LocationState &

@@ -14,7 +14,7 @@ import {
     TableRow
 } from "semantic-ui-react";
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
-import ItemModal from "./ItemModal";
+import ItemModal from "../modals/ItemModal";
 
 class Dashboard extends Component {
 

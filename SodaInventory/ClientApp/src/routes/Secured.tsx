@@ -2,10 +2,12 @@ import React, {Component} from 'react';
 import PrivateRoute from '../hoc/PrivateRoute';
 import {Switch} from "react-router";
 import NavMenu from "../components/NavMenu";
-import Location from '../components/Location';
-import AddLocation from '../components/AddLocation';
-import InventoryForm from '../components/InventoryForm';
+import Location from '../pages/Location';
+import AddLocation from '../pages/AddLocation';
+import InventoryForm from '../pages/InventoryForm';
 import Dashboard from "../pages/Dashboard";
+import AddItem from "../pages/AddItem";
+import CreateItem from "../modals/CreateItemModal";
 
 class Secured extends Component {
     render() {
@@ -13,6 +15,8 @@ class Secured extends Component {
             <div>
                 <NavMenu/>
                 <Switch>
+                    <PrivateRoute path="/AddItem" component={AddItem}/>
+                    <PrivateRoute path="/CreateItem" component={CreateItem}/>
                     <PrivateRoute path="/select-store" component={Location} />
                     <PrivateRoute path="/add-store" component={AddLocation} />
                     <PrivateRoute path='/inventory-form' component={InventoryForm} />

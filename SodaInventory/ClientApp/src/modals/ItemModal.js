@@ -92,7 +92,7 @@ class ItemModal extends Component {
                             </ResponsiveContainer>
                         </Segment>
                     </ModalContent>
-                    <ModalActions>
+                    <ModalActions style={{justifyContent: 'space-between'}}>
                         <Button primary>Edit Item Details<Icon className="pl-3" name='pencil alternate'/></Button>
                         <Button secondary onClick={() => this.setState({showAdjustInventoryModal: true})}>Adjust Inventory<Icon name='chevron right'/></Button>
                     </ModalActions>

@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
-import { ApplicationState } from '../store';
-import { Link } from 'react-router-dom';
+import {connect} from 'react-redux';
+import {RouteComponentProps} from 'react-router';
+import {ApplicationState} from '../store';
+import {Link} from 'react-router-dom';
 import * as InventoryStore from '../store/Inventory';
-import { Form, Grid } from 'semantic-ui-react';
+import {Form, Grid} from 'semantic-ui-react';
 
 type InventoryProps =
     InventoryStore.InventoryState &
