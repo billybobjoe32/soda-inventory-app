@@ -62,6 +62,10 @@ code {
     .ui.mini.modal {
         height: 380px
     }
+
+    .ui.small.modal {
+        height: 800px
+    }
 }
 
 .ui.modal>.close {

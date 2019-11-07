@@ -3,7 +3,6 @@ import PrivateRoute from '../hoc/PrivateRoute';
 import {Switch} from "react-router";
 import NavMenu from "../components/NavMenu";
 import Location from '../pages/Location';
-import AddLocation from '../pages/AddLocation';
 import InventoryForm from '../pages/InventoryForm';
 import Dashboard from "../pages/Dashboard";
 import AddItem from "../pages/AddItem";
@@ -18,7 +17,6 @@ class Secured extends Component {
                     <PrivateRoute path="/AddItem" component={AddItem}/>
                     <PrivateRoute path="/CreateItem" component={CreateItem}/>
                     <PrivateRoute path="/select-store" component={Location} />
-                    <PrivateRoute path="/add-store" component={AddLocation} />
                     <PrivateRoute path='/inventory-form' component={InventoryForm} />
                     <PrivateRoute path='/*' component={Dashboard} />
                 </Switch>
