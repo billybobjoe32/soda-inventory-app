@@ -52,9 +52,9 @@ class AddItem extends React.Component {
                     <Grid.Column>
                         <Header as='h3'>
                             <Icon name='boxes' circular/>
-                            <Header.Content>Create Item</Header.Content>
+                            <Header.Content>Available Items</Header.Content>
                         </Header>
-                        <Header as='h5' textAlign='left'>Existing Items</Header>
+                        {/* <Header as='h5' textAlign='left'>Available Items</Header> */}
                         <Segment attached style={{overflow: 'auto', height: '40vh'}}>
                             <List style={{textAlign: 'left'}}>
                                 {this.createRows(data)}
