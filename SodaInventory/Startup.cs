@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
 
 namespace SodaInventory
 {
@@ -21,12 +23,18 @@ namespace SodaInventory
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddControllersWithViews();
 
 			// In production, the React files will be served from this directory
 			services.AddSpaStaticFiles(configuration =>
 			{
 				configuration.RootPath = "ClientApp/build";
+			});
+			services.AddControllers();
+
+			// Register the Swagger generator, defining 1 or more Swagger documents
+			services.AddSwaggerGen(c =>
+			{
+				c.SwaggerDoc("v1", new OpenApiInfo { Title = "SodaInventory API", Version = "v1" });
 			});
 		}
 
@@ -48,13 +56,20 @@ namespace SodaInventory
 			app.UseStaticFiles();
 			app.UseSpaStaticFiles();
 
-			app.UseRouting();
+			// Enable middleware to serve generated Swagger as a JSON endpoint.
+			app.UseSwagger();
 
+			// Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+			// specifying the Swagger JSON endpoint.
+			app.UseSwaggerUI(c =>
+			{
+				c.SwaggerEndpoint("/swagger/v1/swagger.json", "SodaInventory API V1");
+			});
+
+			app.UseRouting();
 			app.UseEndpoints(endpoints =>
 			{
-				endpoints.MapControllerRoute(
-					name: "default",
-					pattern: "api/{controller}/{action=Index}/{id?}");
+				endpoints.MapControllers();
 			});
 
 			app.UseSpa(spa =>

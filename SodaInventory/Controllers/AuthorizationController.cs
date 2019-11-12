@@ -17,7 +17,12 @@ namespace SodaInventory.Controllers
 		{
 			_logger = logger;
 		}
-
+		/// <summary>
+		/// Finds out if the user is authorized and returns the user's type
+		/// </summary>
+		/// <param name="userName"></param>
+		/// <param name="isAuthorized"></param>
+		/// <returns></returns>
 		[HttpGet]
 		public HttpResponseMessage Get(string userName, bool isAuthorized = true)
 		{
@@ -28,7 +33,7 @@ namespace SodaInventory.Controllers
 			{
 				_logger.LogInformation(userName + " is now logged in");
 				response.StatusCode = System.Net.HttpStatusCode.OK;
-				response.Content = new StringContent("UserLevel: " + userLevel);
+				response.Content = new StringContent("UserType: " + userLevel);
 				return response;
 			}
 			else
