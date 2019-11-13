@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.OpenApi.Models;
+using SodaInventory.Model;
 
 namespace SodaInventory
 {
@@ -36,6 +37,8 @@ namespace SodaInventory
 			{
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "SodaInventory API", Version = "v1" });
 			});
+
+			services.AddDbContext<DatabaseContext>(ServiceLifetime.Scoped);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
