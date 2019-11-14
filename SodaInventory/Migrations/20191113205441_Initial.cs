@@ -91,7 +91,7 @@ namespace SodaInventory.Migrations
                     ItemAlertId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ItemId = table.Column<int>(nullable: true),
-                    StoreId = table.Column<int>(nullable: false),
+                    StoreId = table.Column<int>(nullable: true),
                     ModerateLevel = table.Column<decimal>(nullable: false),
                     UrgentLevel = table.Column<decimal>(nullable: false)
                 },
@@ -103,13 +103,13 @@ namespace SodaInventory.Migrations
                         column: x => x.ItemId,
                         principalTable: "Items",
                         principalColumn: "ItemId",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ItemAlerts_Stores_StoreId",
                         column: x => x.StoreId,
                         principalTable: "Stores",
                         principalColumn: "StoreId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -119,7 +119,7 @@ namespace SodaInventory.Migrations
                     ItemQuantityId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ItemId = table.Column<int>(nullable: true),
-                    StoreId = table.Column<int>(nullable: false),
+                    StoreId = table.Column<int>(nullable: true),
                     Amount = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
@@ -130,13 +130,13 @@ namespace SodaInventory.Migrations
                         column: x => x.ItemId,
                         principalTable: "Items",
                         principalColumn: "ItemId",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ItemQuantities_Stores_StoreId",
                         column: x => x.StoreId,
                         principalTable: "Stores",
                         principalColumn: "StoreId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

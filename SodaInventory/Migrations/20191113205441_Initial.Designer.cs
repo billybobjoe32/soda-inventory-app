@@ -10,7 +10,7 @@ using SodaInventory.Model;
 namespace SodaInventory.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20191113191903_Initial")]
+    [Migration("20191113205441_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,7 +73,7 @@ namespace SodaInventory.Migrations
                     b.Property<decimal>("ModerateLevel")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("StoreId")
+                    b.Property<int?>("StoreId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("UrgentLevel")
@@ -101,7 +101,7 @@ namespace SodaInventory.Migrations
                     b.Property<int?>("ItemId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StoreId")
+                    b.Property<int?>("StoreId")
                         .HasColumnType("int");
 
                     b.HasKey("ItemQuantityId");
@@ -181,28 +181,22 @@ namespace SodaInventory.Migrations
                 {
                     b.HasOne("SodaInventory.Model.Item", "Item")
                         .WithMany("ItemAlerts")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("ItemId");
 
                     b.HasOne("SodaInventory.Model.Store", "Store")
                         .WithMany("ItemAlerts")
-                        .HasForeignKey("StoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StoreId");
                 });
 
             modelBuilder.Entity("SodaInventory.Model.ItemQuantity", b =>
                 {
                     b.HasOne("SodaInventory.Model.Item", "Item")
                         .WithMany("ItemQuantities")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("ItemId");
 
                     b.HasOne("SodaInventory.Model.Store", "Store")
                         .WithMany("ItemQuantities")
-                        .HasForeignKey("StoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StoreId");
                 });
 
             modelBuilder.Entity("SodaInventory.Model.Store", b =>

@@ -1,12 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.OpenApi.Models;
 using SodaInventory.Model;
 
@@ -24,7 +22,6 @@ namespace SodaInventory
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-
 			// In production, the React files will be served from this directory
 			services.AddSpaStaticFiles(configuration =>
 			{
@@ -38,7 +35,8 @@ namespace SodaInventory
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "SodaInventory API", Version = "v1" });
 			});
 
-			services.AddDbContext<DatabaseContext>(ServiceLifetime.Scoped);
+			services.AddDbContext<DatabaseContext>(options =>
+				options.UseSqlServer(Configuration.GetConnectionString("SodaInventoryDatabase")));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

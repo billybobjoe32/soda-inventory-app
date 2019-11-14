@@ -11,29 +11,8 @@ namespace SodaInventory.Model
 		public DbSet<ItemAlert> ItemAlerts { get; set; }
 		public DbSet<ItemQuantity> ItemQuantities { get; set; }
 
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		public DatabaseContext(DbContextOptions options) : base(options)
 		{
-			optionsBuilder.UseSqlServer(@"Data Source=localhost;Initial Catalog=SodaInventoryDB;Integrated Security=True;");
-		}
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			modelBuilder.Entity<Store>()
-				.HasMany(s => s.ItemAlerts)
-				.WithOne(i => i.Store)
-				.OnDelete(DeleteBehavior.Cascade);
-			modelBuilder.Entity<Store>()
-				.HasMany(s => s.ItemQuantities)
-				.WithOne(i => i.Store)
-				.OnDelete(DeleteBehavior.Cascade);
-
-			modelBuilder.Entity<Item>()
-				.HasMany(i => i.ItemAlerts)
-				.WithOne(ia => ia.Item)
-				.OnDelete(DeleteBehavior.SetNull);
-			modelBuilder.Entity<Item>()
-				.HasMany(i => i.ItemQuantities)
-				.WithOne(iq => iq.Item)
-				.OnDelete(DeleteBehavior.SetNull);
 		}
 	}
 }
