@@ -13,6 +13,12 @@ namespace SodaInventory.Model
 
 		public DatabaseContext(DbContextOptions options) : base(options)
 		{
+			this.Database.Migrate();
+		}
+
+		public DatabaseContext(): base()
+		{
+			this.Database.Migrate();
 		}
 	}
 }

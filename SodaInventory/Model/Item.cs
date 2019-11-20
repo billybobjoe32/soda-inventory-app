@@ -7,7 +7,7 @@ namespace SodaInventory.Model
 	{
 		public int ItemId { get; set; }
 		[Required]
-		public Company Company { get; set; }
+		public int CompanyId { get; set; }
 		public string ItemName { get; set; }
 		public string Units { get; set; }
 
@@ -18,7 +18,6 @@ namespace SodaInventory.Model
 		{
 			ItemAlerts = new List<ItemAlert>();
 			ItemQuantities = new List<ItemQuantity>();
-			Company = new Company();
 		}
 	}
 }

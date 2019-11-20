@@ -22,7 +22,7 @@ namespace SodaInventory.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Item>>> GetItems(int companyId)
         {
-            return await _context.Items.Where(i => i.Company.CompanyId == companyId).ToListAsync();
+            return await _context.Items.Where(i => i.CompanyId == companyId).ToListAsync();
         }
 
         // GET: api/Items/5
@@ -76,8 +76,8 @@ namespace SodaInventory.Controllers
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         public async Task<ActionResult<Item>> PostItem(Item item)
-        {
-            _context.Items.Add(item);
+		{
+			_context.Items.Add(item);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetItem", new { id = item.ItemId }, item);

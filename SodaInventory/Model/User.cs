@@ -5,9 +5,10 @@ namespace SodaInventory.Model
 	public class User
 	{
 		[Key]
+		[EmailAddress]
 		public string Email { get; set; }
 		[Required]
-		public Company Company { get; set; }
+		public int CompanyId { get; set; }
 		[Required]
 		public string Password { get; set; }
 		[Required]
@@ -15,7 +16,7 @@ namespace SodaInventory.Model
 
 		public User()
 		{
-			Company = new Company();
+			
 		}
 	}
 

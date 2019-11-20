@@ -23,7 +23,7 @@ namespace SodaInventory.Controllers
 		[Route("GetUsersForCompany")]
 		public async Task<ActionResult<IEnumerable<User>>> GetUsersForCompany(int companyId)
 		{
-			return await _context.Users.Where(u => u.Company.CompanyId == companyId).ToListAsync();
+			return await _context.Users.Where(u => u.CompanyId == companyId).ToListAsync();
 		}
 
 		// GET: api/Users
