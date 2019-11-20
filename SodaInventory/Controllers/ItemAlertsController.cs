@@ -22,7 +22,7 @@ namespace SodaInventory.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ItemAlert>>> GetItemAlerts(int itemId)
         {
-            return await _context.ItemAlerts.Where(ia => ia.Item.ItemId == itemId).ToListAsync();
+            return await _context.ItemAlerts.Where(ia => ia.ItemId == itemId).ToListAsync();
         }
 
         // GET: api/ItemAlerts/5
