@@ -34,9 +34,13 @@ namespace SodaInventory
 			{
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "SodaInventory API", Version = "v1" });
 			});
-
+#if DEBUG
 			services.AddDbContext<DatabaseContext>(options =>
-				options.UseSqlServer(Configuration.GetConnectionString("SodaInventoryDatabase")));
+				options.UseSqlServer(Configuration.GetConnectionString("SodaInventoryDatabaseDebug")));
+#else
+			services.AddDbContext<DatabaseContext>(options =>
+				options.UseSqlServer(Configuration.GetConnectionString("SodaInventoryDatabaseProd")));
+#endif
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

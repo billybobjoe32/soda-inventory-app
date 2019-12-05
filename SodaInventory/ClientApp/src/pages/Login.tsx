@@ -46,6 +46,7 @@ class Login extends React.Component {
 		//Remove this when we get a token back from the server at login
 		window.location.href="./";
 		sessionStorage.setItem("token", "test");
+		sessionStorage.setItem("companyId", "1");
 	}
 }
 
