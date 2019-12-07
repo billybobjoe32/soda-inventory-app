@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
+import { apiAddress, getCookie } from '../store/DataAccess';
 import * as InventoryStore from '../store/Inventory';
 import {Button, Form, Grid, Header, Icon, Segment} from 'semantic-ui-react';
 
@@ -7,11 +8,59 @@ class InventoryForm extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            items: [],
+            quantities: [],
+            isValid: true
+        }
     }
 
+    componentDidMount() {
+        fetch(apiAddress + '/api/Items?companyId=' + getCookie("companyId"))
+            .then(results => { return results.json(); })
+            .then(data => {
+                let temp_items = [];
+                let temp_quants = [];
+
+                data.forEach((item) => {
+                    fetch(apiAddress + '/api/ItemQuantities?itemId=' + item.itemId)
+                        .then(results => { return results.json(); })
+                        .then(data => {
+                            data.forEach((quant) => {
+                                if (quant.storeId === parseInt(getCookie("storeId"))) {
+                                    temp_items.push(item);
+                                    temp_quants[item.itemId] = quant;
+                                }
+                            });
+
+                            this.setState({
+                                items: temp_items,
+                                quantities: temp_quants,
+                            });
+                        })
+                });
+            })
+    }
+
+    updateInventory = (quantities) => {
+        this.state.quantities.forEach(quant => {
+            console.log(quant.itemId);
+            fetch(apiAddress + '/api/ItemQuantities/' + quant.itemQuantityId,
+                {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        "itemQuantityId": quant.itemQuantityId,
+                        "itemId": quant.itemId,
+                        "storeId": quant.storeId,
+                        "amount": parseInt(quantities[quant.itemId])
+                    })
+                })
+        });
+    };
+
     render() {
-        let itemArr = [-1, -1, -1, -1, -1, -1, -1, -1];
+        let quantities = [];
 
         return (
             <div>
@@ -26,25 +75,32 @@ class InventoryForm extends Component {
                     </Header>
                     <div className="ui section divider"/>
                     <Grid textAlign='center' verticalAlign='middle' >
-                        <Grid.Column style={{ width: '70%', maxWidth: 650 }}>
+                        <Grid.Column style={{ width: '100%', maxWidth: 650 }}>
                             <Form>
-                                {this.props.items.map((item) =>
+                                {this.state.items.map((item) =>
                                     <div className='p-3'>
                                         <Grid.Row style={{marginBottom: 20}}>
-                                            <Grid.Column style={{ width: '50%'}}>
-                                                <h3 style={{textAlign: "center"}}>{item.name}</h3>
-                                            </Grid.Column>
                                             <Grid.Column style={{ width: '50%' }}>
-                                                <h4 style={{ textAlign: "center" }}>Current Value: {item.quantity}</h4>
+                                                <Grid.Row>
+                                                    <h3 style={{ textAlign: "left", paddingLeft: 20 }}>{item.itemName}</h3>
+                                                </Grid.Row>
+                                                <Grid.Row>
+                                                    <h6 style={{ textAlign: "left", paddingLeft: 20 }}>Current: {this.state.quantities[item.itemId].amount} {item.units}</h6>
+                                                </Grid.Row>
+                                            </Grid.Column>
+                                            <Grid.Column style={{ width: '50%', textAlign: 'left' }}>
+                                                <Grid.Row>
+                                                    <Form.Input style={{ maxWidth: 100 }}
+                                                        onChange={(e) => quantities[item.itemId] = e.target.value} />
+                                                    <h4 style={{ paddingLeft: 10, paddingTop: 5}}>{item.units}</h4>
+                                                </Grid.Row>
                                             </Grid.Column>
                                         </Grid.Row>
-                                        <Form.Input style={{maxWidth: 300}}
-                                                    onChange={(e) => itemArr[item.id] = parseInt(e.target.value)} />
                                         <div className="ui section divider" />
                                     </div>
                                 )}
 
-                                <Button primary onClick={() => this.props.updateInventory(itemArr)}>Submit</Button>
+                                <Button primary onClick={() => this.updateInventory(quantities)}>Submit</Button>
                             </Form>
                         </Grid.Column>
                     </Grid>
