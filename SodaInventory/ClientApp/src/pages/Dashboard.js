@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {Component} from 'react';
+import { Component } from 'react';
+import { getCookie } from '../store/DataAccess';
 import {connect} from 'react-redux';
 import {
     Header,
@@ -14,7 +15,7 @@ import {
     TableRow
 } from "semantic-ui-react";
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
-import ItemModal from "./ItemModal";
+import ItemModal from "../modals/ItemModal";
 
 class Dashboard extends Component {
 
@@ -34,6 +35,7 @@ class Dashboard extends Component {
         if (window.location.pathname + window.location.search !== '/') {
             window.location.href = '/'
         }
+        console.log(getCookie("storeId"));
     }
 
     handleTabChange = (e, data) => {

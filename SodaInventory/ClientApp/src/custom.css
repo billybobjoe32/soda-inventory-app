@@ -40,6 +40,9 @@ code {
     .ui.large.modal {
         width: 100%;
     }
+    .ui.small.modal {
+        width: 100%;
+    }
     .ui.dimmer  {
         padding: 0;
     }
@@ -51,13 +54,17 @@ code {
 
     .ui.modal>.actions {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
     }
 }
 
 @media only screen and (min-width: 1920px) {
     .ui.mini.modal {
         height: 380px
+    }
+
+    .ui.small.modal {
+        height: 800px
     }
 }
 

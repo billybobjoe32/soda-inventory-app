@@ -1,5 +1,6 @@
 ﻿import * as React from 'react';
 import { connect } from 'react-redux';
+import { setCookie } from '../store/DataAccess';
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
 
 class Login extends React.Component {
@@ -29,7 +30,7 @@ class Login extends React.Component {
 								type='password'
 							/>
 
-							<Button color='teal' fluid size='large'>
+                            <Button color='teal' fluid size='large' onClick={() => setCookie("companyId", "1")}>
 								Login
 							</Button>
 						</Segment>
@@ -44,7 +45,7 @@ class Login extends React.Component {
 
 	private login = () => {
 		//Remove this when we get a token back from the server at login
-		window.location.href="./";
+		window.location.href="./select-store";
 		sessionStorage.setItem("token", "test");
 	}
 }

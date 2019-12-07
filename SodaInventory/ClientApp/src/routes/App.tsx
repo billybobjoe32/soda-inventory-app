@@ -1,6 +1,5 @@
 import {Route, Switch} from 'react-router';
 import Login from '../pages/Login';
-import AddItem from '../pages/AddItem';
 import LoggedIn from './Secured';
 
 import '../custom.css'
@@ -15,10 +14,6 @@ class App extends Component {
                     <div>
                         <Switch>
                             <Route exact path="/login" component={Login}/>
-
-                            {/* I added this to the rout switch for accessability */}
-                            <Route exact path="/AddItem" component={AddItem}/>
-
                             <Route exact path="/*" component={LoggedIn}/>
                         </Switch>
                     </div>
