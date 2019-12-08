@@ -1,15 +1,38 @@
 import * as React from 'react';
 import {Button, Checkbox, Grid, Header, Icon, List, Segment} from 'semantic-ui-react'
 import CreateItem from "../modals/CreateItemModal";
+import { getCookie, apiAddress } from '../store/DataAccess';
+
+const localAddress = "http://localhost:3000";
 
 class AddItem extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            showNewItemModal: false
+            showNewItemModal: false,
+            items: [],
         };
     }
+
+    loadData = () => {
+        fetch(localAddress + '/api/Items?itemId=' + getCookie("itemId"))
+            .then(results => { return results.json(); })
+            .then(data => {
+                this.setState({
+                    items: data,
+                });
+            })
+    }
+
+    componentDidMount() {
+        this.loadData();
+    }
+
+    closeModal = () => {
+        this.loadData();
+        this.setState({showNewItemModal: false});
+    };
 
     createRows = (data) => {
         let rows = [];
@@ -18,10 +41,6 @@ class AddItem extends React.Component {
         });
 
         return rows;
-    };
-
-    closeModal = () => {
-        this.setState({showNewItemModal: false});
     };
 
     render() {
