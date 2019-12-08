@@ -1,22 +1,39 @@
 import * as React from 'react';
 import {Component} from 'react';
 import {connect} from 'react-redux';
+import {apiAddress, getCookie, setCookie} from '../store/DataAccess';
 import {Link} from 'react-router-dom';
 import * as LocationStore from '../store/Location';
 import {Button, Card, Container, Header, Icon, Segment} from 'semantic-ui-react';
 import AddLocation from "../modals/AddLocationModal";
 
-class Counter extends Component {
+class Location extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             showAddLocationModal: false,
+            stores: [],
         }
     }
 
+    loadData = () => {
+        fetch(apiAddress + '/api/Stores?companyId=' + getCookie("companyId"))
+            .then(results => { return results.json(); })
+            .then(data => {
+                this.setState({
+                    stores: data,
+                });
+            })
+    };
+
+    componentDidMount() {
+        this.loadData();
+    }
+
     closeModal = () => {
-        this.setState({showAddLocationModal: false})
+        this.loadData();
+        this.setState({ showAddLocationModal: false});
     };
 
     render() {
@@ -34,6 +51,12 @@ class Counter extends Component {
                             <Header.Content>Add a store</Header.Content>
                         </Header>
 
+                    {this.state.stores.map((location) =>
+                        <Link onClick={() => setCookie("storeId", location.storeId.toString())} to='/'>
+                            <h3 key={location.storeId} style={{ color: 'black' }}>{location.storeName}</h3>
+                            <div className="ui section divider"/>
+                        </Link>
+                    )}
                         <Container>
                             <Card fluid onClick={() => console.log("Click on item")}>
                                 <Card.Content>
@@ -61,4 +84,4 @@ class Counter extends Component {
 export default connect(
     (state) => state.locations,
     LocationStore.actionCreator
-)(Counter);
+)(Location);
