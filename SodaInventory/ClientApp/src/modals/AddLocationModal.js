@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import {apiAddress, getCookie} from '../store/DataAccess';
-import * as LocationStore from '../store/Location';
 import {Button, Form, Header, Icon, Modal, ModalActions, ModalContent, Segment} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
@@ -10,6 +8,7 @@ class AddLocationModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            storeId: '',
             name: '',
             street: '',
             city: '',
@@ -18,25 +17,6 @@ class AddLocationModal extends Component {
             isValid: true
         }
     }
-
-    addLocation = () => {
-        fetch(apiAddress + '/api/Stores',
-            {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    "storeId": 0,
-                    "companyId": parseInt(getCookie("companyId")),
-                    "storeName": this.state.name,
-                    "streetAddress": this.state.street,
-                    "city": this.state.city,
-                    "state": this.state.state,
-                    "zipCode": parseInt(this.state.zip),
-                    "itemAlerts": [],
-                    "itemQuantities": []
-                })
-            }).then(this.clearModal()).then(() => this.props.closeModal())
-    };
 
     validate = () => {
         if (this.state.name != '' && this.state.street != '' && this.state.city != '' &&
@@ -56,6 +36,7 @@ class AddLocationModal extends Component {
 
     clearModal = () => {
         this.setState({
+            storeId: '',
             name: '',
             street: '',
             city: '',
@@ -120,14 +101,11 @@ class AddLocationModal extends Component {
             </div>
         );
     }
-};
+}
 
 AddLocationModal.propTypes = {
     showModal: PropTypes.bool,
     closeModal: PropTypes.func,
 };
 
-export default connect(
-    (state) => state.locations,
-    LocationStore.actionCreator
-)(AddLocationModal);
+export default (AddLocationModal);

@@ -1,9 +1,6 @@
 import * as React from 'react';
 import {Component} from 'react';
-import {connect} from 'react-redux';
 import {apiAddress, getCookie, setCookie} from '../store/DataAccess';
-import {Link} from 'react-router-dom';
-import * as LocationStore from '../store/Location';
 import {Button, Card, Container, Header, Icon, Segment} from 'semantic-ui-react';
 import AddLocation from "../modals/AddLocationModal";
 
@@ -13,19 +10,8 @@ class Location extends Component {
         super(props);
         this.state = {
             showAddLocationModal: false,
-            stores: [],
         }
     }
-
-    loadData = () => {
-        fetch(apiAddress + '/api/Stores?companyId=' + getCookie("companyId"))
-            .then(results => { return results.json(); })
-            .then(data => {
-                this.setState({
-                    stores: data,
-                });
-            })
-    };
 
     componentDidMount() {
         this.loadData();
@@ -36,10 +22,17 @@ class Location extends Component {
         this.setState({ showAddLocationModal: false});
     };
 
+    showModal = (editStoreId) => {
+        this.setState({
+            editStoreId: editStoreId,
+            showAddLocationModal: true
+        })
+    };
+
     render() {
         return (
             <div>
-                <AddLocation showModal={this.state.showAddLocationModal} closeModal={this.closeModal}/>
+                <AddLocation showModal={this.state.showAddLocationModal} editStoreId={this.state.editStoreId} closeModal={this.closeModal} clearRequest={this.clearRequest}/>
                 <Container>
                     <Header as='h2' attached='top'>
                         Select Store
@@ -48,15 +41,8 @@ class Location extends Component {
                     <Segment attached>
                         <Header as='h3' className='mb-4'>
                             <Icon name='building' circular/>
-                            <Header.Content>Add a store</Header.Content>
+                            <Header.Content>Store selection</Header.Content>
                         </Header>
-
-                    {this.state.stores.map((location) =>
-                        <Link onClick={() => setCookie("storeId", location.storeId.toString())} to='/'>
-                            <h3 key={location.storeId} style={{ color: 'black' }}>{location.storeName}</h3>
-                            <div className="ui section divider"/>
-                        </Link>
-                    )}
                         <Container>
                             <Card fluid onClick={() => console.log("Click on item")}>
                                 <Card.Content>
@@ -81,7 +67,4 @@ class Location extends Component {
     }
 };
 
-export default connect(
-    (state) => state.locations,
-    LocationStore.actionCreator
-)(Location);
+export default (Location);
