@@ -4,6 +4,8 @@ import {Button, Form, Header, Icon, Modal, ModalActions, ModalContent} from 'sem
 import PropTypes from 'prop-types';
 import { apiAddress, getCookie } from '../store/DataAccess';
 
+const tempAddress = "localhost:3000"
+
 class CreateItemModal extends Component {
 
     constructor(props) {

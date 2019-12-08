@@ -3,8 +3,6 @@ import {Button, Checkbox, Grid, Header, Icon, List, Segment} from 'semantic-ui-r
 import CreateItem from "../modals/CreateItemModal";
 import { getCookie, apiAddress } from '../store/DataAccess';
 
-const localAddress = "http://localhost:3000";
-
 class AddItem extends React.Component {
 
     constructor(props) {
@@ -16,7 +14,7 @@ class AddItem extends React.Component {
     }
 
     loadData = () => {
-        fetch(localAddress + '/api/Items?itemId=' + getCookie("itemId"))
+        fetch(apiAddress + '/api/Items?itemId=' + getCookie("itemId"))
             .then(results => { return results.json(); })
             .then(data => {
                 this.setState({
