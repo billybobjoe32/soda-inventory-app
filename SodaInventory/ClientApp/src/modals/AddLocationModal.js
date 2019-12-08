@@ -34,6 +34,12 @@ class AddLocationModal extends Component {
         }
     };
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.editStoreId) {
+            this.loadData();
+        }
+    }
+
     clearModal = () => {
         this.setState({
             storeId: '',
@@ -101,11 +107,55 @@ class AddLocationModal extends Component {
             </div>
         );
     }
+
+    addLocation = () => {
+        let saveMethod = this.state.storeId !== '' ? 'PUT' : 'POST';
+        let request = {
+            storeId: 0,
+            companyId: parseInt(getCookie("companyId")),
+            storeName: this.state.name,
+            streetAddress: this.state.street,
+            city: this.state.city,
+            state: this.state.state,
+            zipCode: parseInt(this.state.zip),
+            itemAlerts: [],
+            itemQuantities: []
+        };
+
+        if (this.state.storeId !== '') {
+            request = {...request, storeId: this.state.storeId}
+        }
+
+        fetch(`${apiAddress}/api/Stores/${this.state.storeId}`,
+            {
+                method: saveMethod,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(request)
+            }).then(this.clearModal()).then(() => this.props.closeModal())
+    };
+
+    loadData = () => {
+        fetch(`${apiAddress}/api/Stores/${this.props.editStoreId}`)
+            .then(response => response.json())
+            .then(data => {
+                this.setState({
+                    storeId: data.storeId,
+                    name: data.storeName,
+                    street: data.streetAddress,
+                    city: data.city,
+                    state: data.state,
+                    zip: data.zipCode
+                });
+                this.props.clearRequest();
+            })
+    }
 }
 
 AddLocationModal.propTypes = {
     showModal: PropTypes.bool,
     closeModal: PropTypes.func,
+    editStoreId: PropTypes.number,
+    clearRequest: PropTypes.func,
 };
 
 export default (AddLocationModal);

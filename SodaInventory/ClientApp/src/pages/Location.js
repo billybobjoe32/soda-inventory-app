@@ -9,6 +9,9 @@ class Location extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            storeList: [],
+            selectedStoreId: getCookie("storeId"),
+            editStoreId: null,
             showAddLocationModal: false,
         }
     }
@@ -29,6 +32,32 @@ class Location extends Component {
         })
     };
 
+    setStoreId = (selectedStoreId) => {
+        setCookie("storeId", selectedStoreId);
+        this.setState({selectedStoreId})
+    };
+
+    getList = (data) => {
+        let list = [];
+        data.forEach((item) => {
+            list.push(
+                <Card key={item.storeId} fluid color={this.state.selectedStoreId == item.storeId ? 'green' : 'black'} onClick={() => this.setStoreId(item.storeId)}>
+                    <Card.Content>
+                        <Button primary style={{float: 'right'}}  icon='edit' className='mt-1' onClick={() => this.showModal(item.storeId)}/>
+                        <Card.Header>{item.storeName}</Card.Header>
+                        <Card.Meta>{item.streetAddress} {item.city}, {item.state} {item.zipCode}</Card.Meta>
+                    </Card.Content>
+                </Card>
+            );
+        });
+
+        return list;
+    };
+
+    clearRequest = () => {
+        this.setState({editStoreId: null})
+    };
+
     render() {
         return (
             <div>
@@ -36,7 +65,9 @@ class Location extends Component {
                 <Container>
                     <Header as='h2' attached='top'>
                         Select Store
-                        <Button floated='right' primary onClick={() => this.setState({showAddLocationModal: true})}>Add Store</Button>
+                        <Button floated='right' primary onClick={() => this.setState({showAddLocationModal: true})}>
+                            Add Store
+                        </Button>
                     </Header>
                     <Segment attached>
                         <Header as='h3' className='mb-4'>
@@ -44,27 +75,19 @@ class Location extends Component {
                             <Header.Content>Store selection</Header.Content>
                         </Header>
                         <Container>
-                            <Card fluid onClick={() => console.log("Click on item")}>
-                                <Card.Content>
-                                    <Icon name="edit" style={{float:'right'}} size={"big"} className="mt-1"/>
-                                    <Card.Header>Store 1</Card.Header>
-                                    <Card.Meta>1234 E. 567 S. Provo UT</Card.Meta>
-                                </Card.Content>
-                            </Card>
-
-                        {this.props.locations.map((location) =>
-                            <Link to='/'>
-                                <h3 key={location.id}>{location.name}</h3>
-                                <div className="ui section divider"/>
-                            </Link>
-                        )}
-
+                            {this.getList(this.state.storeList)}
                         </Container>
                     </Segment>
                 </Container>
             </div>
         );
     }
-};
+
+    loadData = () => {
+        fetch(`${apiAddress}/api/Stores?companyId=${getCookie("companyId")}`)
+            .then(response => response.json())
+            .then(storeList => this.setState({storeList: storeList}));
+    }
+}
 
 export default (Location);
