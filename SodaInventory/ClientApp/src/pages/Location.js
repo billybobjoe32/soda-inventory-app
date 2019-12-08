@@ -17,6 +17,10 @@ class Location extends Component {
     }
 
     componentDidMount() {
+        if (!getCookie("companyId")) {
+            window.location.href = '/'
+        }
+
         this.loadData();
     }
 
@@ -35,6 +39,7 @@ class Location extends Component {
     setStoreId = (selectedStoreId) => {
         setCookie("storeId", selectedStoreId);
         this.setState({selectedStoreId})
+        document.location.href="/";
     };
 
     getList = (data) => {

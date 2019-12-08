@@ -20,3 +20,16 @@ export function getCookie(cname) {
     }
     return "";
 }
+
+export function clearCookies() {
+    let cookies = document.cookie.split(";");
+    cookies.forEach((cookie) => {
+        eraseCookie(cookie.split("=")[0]);
+    });
+
+    debugger;
+}
+
+function eraseCookie(name) {
+    setCookie(name,-1);
+}
