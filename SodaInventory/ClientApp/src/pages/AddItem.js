@@ -74,7 +74,10 @@ class AddItem extends React.Component {
                         {/* <Header as='h5' textAlign='left'>Available Items</Header> */}
                         <Segment attached style={{overflow: 'auto', height: '40vh'}}>
                             <List style={{textAlign: 'left'}}>
-                                {this.createRows(data)}
+                                {this.state.items.map((item) =>
+                                    <List.Item><Checkbox label={item.name}/></List.Item>
+                                )}
+                                {/* {this.createRows(data)} */}
                             </List>
                         </Segment>
                         <Button className='mt-3' color='teal' fluid size='large' onClick={() => this.setState({showNewItemModal: true})}>
