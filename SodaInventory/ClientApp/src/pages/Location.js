@@ -48,8 +48,8 @@ class Location extends Component {
                     </Header>
 
                     {this.state.stores.map((location) =>
-                        <Link onClick={() => setCookie("storeId", location.storeId.toString())} to='/'>
-                            <h3 key={location.storeId} style={{ color: 'black' }}>{location.storeName}</h3>
+                        <Link onClick={() => setCookie("storeId", location.storeId.toString())} to='/' style={{ color: 'black' }}>
+                            <h3 key={location.storeId}>{location.storeName}</h3>
                             <div className="ui section divider"/>
                         </Link>
                     )}

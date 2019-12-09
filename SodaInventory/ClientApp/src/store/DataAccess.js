@@ -1,4 +1,6 @@
 export const apiAddress = "http://18.216.120.186";
+//The local one is "https://localhost:5001"
+//The server one is "http://18.216.120.186"
 
 export function setCookie(cname, cvalue) {
     document.cookie = cname + "=" + cvalue + ";path=/";
