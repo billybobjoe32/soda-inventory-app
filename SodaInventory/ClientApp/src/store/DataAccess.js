@@ -1,8 +1,7 @@
-// todo: revert this back to 18.216.120.186
-export const apiAddress = "https://localhost:5001";
+export const apiAddress = window.location.pathname.substr(0, window.location.pathname.indexOf('/'));
 
 export function setCookie(cname, cvalue) {
-    document.cookie = cname + "=" + cvalue + ";path=/";
+	document.cookie = cname + "=" + cvalue + ";path=/";
 }
 
 export function getCookie(cname) {
