@@ -83,15 +83,15 @@ class InventoryForm extends Component {
 										<Grid.Row style={{ marginBottom: 20 }}>
 											<Grid.Column style={{ width: '50%' }}>
 												<Grid.Row>
-													<h3 style={{ textAlign: "left", paddingLeft: 20 }}>{item.itemName}</h3>
+													<h3 style={{ textAlign: "left", paddingLeft: 44 }}>{item.itemName}</h3>
 												</Grid.Row>
 												<Grid.Row>
-													<h6 style={{ textAlign: "left", paddingLeft: 20 }}>Current: {this.state.quantities[item.itemId].amount} {item.units}</h6>
+													<h6 style={{ textAlign: "left", paddingLeft: 44 }}>Current: {this.state.quantities[item.itemId].amount} {item.units}</h6>
 												</Grid.Row>
 											</Grid.Column>
-											<Grid.Column style={{ width: '50%', textAlign: 'left' }}>
+											<Grid.Column style={{ width: '50%', textAlign: 'left', paddingLeft: 20 }}>
 												<Grid.Row>
-													<Form.Input style={{ maxWidth: 100 }}
+													<Form.Input style={{ maxWidth: 65 }}
 														onChange={(e) => quantities[item.itemId] = e.target.value} />
 													<h4 style={{ paddingLeft: 10, paddingTop: 5 }}>{item.units}</h4>
 												</Grid.Row>
