@@ -77,7 +77,7 @@ class AddItem extends React.Component {
                                 {this.state.items.map((item) =>
                                     <List.Item><Checkbox label={item.name}/></List.Item>
                                 )}
-                                {/* {this.createRows(data)} */}
+                                {this.createRows(data)}
                             </List>
                         </Segment>
                         <Button className='mt-3' color='teal' fluid size='large' onClick={() => this.setState({showNewItemModal: true})}>
