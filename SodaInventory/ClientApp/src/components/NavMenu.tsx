@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink} from 'reactstrap';
 import {Link} from 'react-router-dom';
+import * as DataAccess from '../store/DataAccess';
 import '../css/NavMenu.css';
 import { getCookie, apiAddress } from '../store/DataAccess';
 
@@ -49,6 +50,7 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean, 
 	}
 
     private logout = () => {
+        DataAccess.clearCookies();
         sessionStorage.clear();
     };
 
