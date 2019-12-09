@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Component } from 'react';
-import { getCookie } from '../store/DataAccess';
+import {Component} from 'react';
 import {connect} from 'react-redux';
 import {
     Header,
@@ -35,7 +34,6 @@ class Dashboard extends Component {
         if (window.location.pathname + window.location.search !== '/') {
             window.location.href = '/'
         }
-        console.log(getCookie("storeId"));
     }
 
     handleTabChange = (e, data) => {

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import { connect } from 'react-redux';
-import { apiAddress, getCookie } from '../store/DataAccess';
+import {connect} from 'react-redux';
+import {apiAddress, getCookie} from '../store/DataAccess';
 import * as InventoryStore from '../store/Inventory';
 import {Button, Form, Grid, Header, Icon, Segment} from 'semantic-ui-react';
 

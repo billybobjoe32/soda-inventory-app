@@ -1,7 +1,7 @@
 ﻿import * as React from 'react';
-import { connect } from 'react-redux';
-import { setCookie } from '../store/DataAccess';
-import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
+import {connect} from 'react-redux';
+import {setCookie} from '../store/DataAccess';
+import {Button, Form, Grid, Header, Image, Message, Segment} from 'semantic-ui-react'
 
 class Login extends React.Component {
 

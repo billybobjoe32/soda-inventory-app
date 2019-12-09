@@ -1,4 +1,5 @@
-export const apiAddress = "http://18.216.120.186";
+// todo: revert this back to 18.216.120.186
+export const apiAddress = "https://localhost:5001";
 
 export function setCookie(cname, cvalue) {
     document.cookie = cname + "=" + cvalue + ";path=/";
@@ -18,4 +19,15 @@ export function getCookie(cname) {
         }
     }
     return "";
+}
+
+export function clearCookies() {
+    let cookies = document.cookie.split(";");
+    cookies.forEach((cookie) => {
+        eraseCookie(cookie.split("=")[0]);
+    });
+}
+
+function eraseCookie(name) {
+    setCookie(name,"");
 }
