@@ -1,9 +1,7 @@
-export const apiAddress = "http://18.216.120.186";
-//The local one is "https://localhost:5001"
-//The server one is "http://18.216.120.186"
+export const apiAddress = window.location.pathname.substr(0, window.location.pathname.indexOf('/'));
 
 export function setCookie(cname, cvalue) {
-    document.cookie = cname + "=" + cvalue + ";path=/";
+	document.cookie = cname + "=" + cvalue + ";path=/";
 }
 
 export function getCookie(cname) {
@@ -20,4 +18,15 @@ export function getCookie(cname) {
         }
     }
     return "";
+}
+
+export function clearCookies() {
+    let cookies = document.cookie.split(";");
+    cookies.forEach((cookie) => {
+        eraseCookie(cookie.split("=")[0]);
+    });
+}
+
+function eraseCookie(name) {
+    setCookie(name,"");
 }
