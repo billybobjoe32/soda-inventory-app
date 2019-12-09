@@ -6,7 +6,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={(props) => (
         sessionStorage.getItem('token') === null
             ? <Redirect to={{ pathname: '/login', state: { from: props.location }}} />
-            : DataAccess.getCookie("storeId") === "-1"
+            : DataAccess.getCookie("storeId") === ""
                 ? <Redirect to={{ pathname: '/select-store', state: { from: props.location }}} />
                 : <Component {...props} />
     )} />

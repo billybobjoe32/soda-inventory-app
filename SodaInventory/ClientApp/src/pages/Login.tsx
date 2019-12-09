@@ -30,7 +30,7 @@ class Login extends React.Component {
 								type='password'
 							/>
 
-                            <Button color='teal' fluid size='large' onClick={() => setCookie("companyId", "2")}>
+                            <Button color='teal' fluid size='large' onClick={() => setCookie("companyId", "1")}>
 								Login
 							</Button>
 						</Segment>

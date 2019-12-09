@@ -26,10 +26,8 @@ export function clearCookies() {
     cookies.forEach((cookie) => {
         eraseCookie(cookie.split("=")[0]);
     });
-
-    debugger;
 }
 
 function eraseCookie(name) {
-    setCookie(name,-1);
+    setCookie(name,"");
 }
