@@ -7,9 +7,9 @@ namespace SodaInventory.Model
 	{
 		public int CompanyId { get; set; }
 		public string CompanyName { get; set; }
-		public List<Store> Stores { get; set; }
-		public List<Item> Items { get; set; }
-		public List<User> Users { get; set; }
+		public virtual ICollection<Store> Stores { get; set; }
+		public virtual ICollection<Item> Items { get; set; }
+		public virtual ICollection<User> Users { get; set; }
 
 		public Company()
 		{

@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SodaInventory.Model;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SodaInventory.Model;
 
 namespace SodaInventory.Controllers
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ItemQuantitiesController : ControllerBase
     {
@@ -20,9 +22,9 @@ namespace SodaInventory.Controllers
 
         // GET: api/ItemQuantities
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ItemQuantity>>> GetItemQuantities(int itemId)
+        public async Task<ActionResult<IEnumerable<ItemQuantity>>> GetItemQuantities(int storeId)
         {
-            return await _context.ItemQuantities.Where(iq => iq.ItemId == itemId).ToListAsync();
+            return await _context.ItemQuantities.Where(iq => iq.StoreId == storeId).ToListAsync();
         }
 
         // GET: api/ItemQuantities/5
