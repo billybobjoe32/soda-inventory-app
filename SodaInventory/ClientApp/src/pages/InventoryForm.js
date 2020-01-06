@@ -102,7 +102,7 @@ class InventoryForm extends Component {
 								)}
 
 								<Button primary circular icon="add" onClick={() => this.redirectToAddItem()}></Button><br /><br />
-								<Button primary onClick={() => this.updateInventory(quantities)}>Submit</Button>
+                                <Button primary onClick={() => { this.updateInventory(quantities); window.location.href = "./"; }}>Submit</Button>
 							</Form>
 						</Grid.Column>
 					</Grid>
