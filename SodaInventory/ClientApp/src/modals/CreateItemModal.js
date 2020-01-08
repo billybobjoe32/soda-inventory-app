@@ -12,13 +12,14 @@ class CreateItemModal extends Component {
             name: '',
             units: '',
             moderateLevel: '',
-            urgentLevel: '',
+			urgentLevel: '',
+			itemId: 0,
             isValid: true
         }
     }
 
-	addItem = () => {
-		fetch(apiAddress + '/api/Items',
+	addItem = async () => {
+		var results = await fetch(apiAddress + '/api/Items',
 			{
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -30,22 +31,22 @@ class CreateItemModal extends Component {
 					"itemAlerts": [],
 					"itemQuantities": []
 				})
-			}).then(results => { return results.json(); })
-			.then(data => {
-				
-				fetch(apiAddress + '/api/ItemQuantities',
-					{
-						method: 'POST',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({
-							"itemQuantityId": 0,
-							"itemId": data.itemId,
-							"storeId": parseInt(getCookie("storeId")),
-							"amount": 0,
-							"moderateLevel": this.state.moderateLevel,
-							"urgentLevel": this.state.urgentLevel
-						})
-					});
+			}
+		);
+		var json = await results.json();
+		var itemId = json.itemId;
+		await fetch(apiAddress + '/api/ItemQuantities',
+			{
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					"itemQuantityId": 0,
+					"itemId": itemId,
+					"storeId": parseInt(getCookie("storeId")),
+					"amount": 0,
+					"moderateLevel": parseFloat(this.state.moderateLevel),
+					"urgentLevel": parseFloat(this.state.urgentLevel)
+				})
 			}).then(this.clearModal()).then(() => this.props.closeModal());
     };
 

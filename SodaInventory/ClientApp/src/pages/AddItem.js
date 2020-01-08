@@ -9,22 +9,74 @@ class AddItem extends React.Component {
         super(props);
         this.state = {
             showNewItemModal: false,
-            items: [],
+			items: [],
+			checkedItems: [],
+			quantities: []
         };
     }
 
-    loadData = () => {
-        fetch(apiAddress + '/api/Items?itemId=' + getCookie("itemId"))
-            .then(results => { return results.json(); })
-            .then(data => {
-                this.setState({
-                    items: data,
-                });
-            })
+	loadData = () => {
+		var companyId = getCookie("companyId");
+		var storeId = getCookie("storeId");
+		fetch(apiAddress + '/api/Items?companyId=' + companyId)
+			.then(results => { return results.json(); })
+			.then(data => {
+				let temp_items = [];
+				let temp_quants = [];
+				let temp_checkedItems = [];
+
+				data.forEach((item) => {
+					fetch(apiAddress + '/api/ItemQuantities?itemId=' + item.itemId)
+						.then(results => { return results.json(); })
+						.then(data => {
+							data.forEach((quant) => {
+								if (quant.storeId === parseInt(storeId)) {
+									temp_quants[item.itemId] = quant;
+									temp_checkedItems.push(item.itemId);
+								}
+							});
+
+							temp_items.push(item);
+							this.setState({
+								items: temp_items,
+								checkedItems: temp_checkedItems,
+								quantities: temp_quants,
+							});
+						})
+				});
+			})
     }
 
-    componentDidMount() {
-        this.loadData();
+	componentDidMount() {
+		var companyId = getCookie("companyId");
+		var storeId = getCookie("storeId");
+		fetch(apiAddress + '/api/Items?companyId=' + companyId)
+			.then(results => { return results.json(); })
+			.then(data => {
+				let temp_items = [];
+				let temp_quants = [];
+				let temp_checkedItems = [];
+
+				data.forEach((item) => {
+					fetch(apiAddress + '/api/ItemQuantities?itemId=' + item.itemId)
+						.then(results => { return results.json(); })
+						.then(data => {
+							data.forEach((quant) => {
+								if (quant.storeId === parseInt(storeId)) {
+									temp_quants[item.itemId] = quant;
+									temp_checkedItems.push(item.itemId);
+								}
+							});
+
+							temp_items.push(item);
+							this.setState({
+								items: temp_items,
+								checkedItems: temp_checkedItems,
+								quantities: temp_quants,
+							});
+						})
+				});
+			})
     }
 
     closeModal = () => {
@@ -32,34 +84,16 @@ class AddItem extends React.Component {
         this.setState({showNewItemModal: false});
     };
 
-    createRows = (data) => {
-        let rows = [];
-        data.forEach((item) => {
-            rows.push(<List.Item><Checkbox label={item}/></List.Item>)
-        });
+	createRows = (items, quantities) => {
+		let rows = [];
+		items.forEach((item) => {
+			rows.push(<List.Item key={item.itemName}><Checkbox onChange={this.checkboxChanged(item.itemId)} key={item.itemId} label={item.itemName} defaultChecked={quantities[item.itemId] ? true : false} /></List.Item>)
+		});
 
-        return rows;
-    };
+		return rows;
+	};
 
     render() {
-        const data = [
-            'Dr. Pepper',
-            'Gingerale',
-            'Carbonated Water',
-            'Orange Soda',
-            'Plastic Cups',
-            'Water Bottles',
-            'Napkins',
-            'Oranges',
-            'Vanilla Syrup',
-            'Chocolate Chip Cookies',
-            'Plastic Straws',
-            '7-up',
-            'Dr. Pepper',
-            'Gingerale',
-            'Carbonated Water',
-            'Orange Soda',
-        ];
 
         return (
             <div>
@@ -74,12 +108,12 @@ class AddItem extends React.Component {
                         {/* <Header as='h5' textAlign='left'>Available Items</Header> */}
                         <Segment attached style={{overflow: 'auto', height: '40vh'}}>
                             <List style={{textAlign: 'left'}}>
-                                {this.state.items.map((item) =>
-                                    <List.Item><Checkbox label={item.name}/></List.Item>
-                                )}
-                                {this.createRows(data)}
+								{this.createRows(this.state.items, this.state.quantities)}
                             </List>
-                        </Segment>
+						</Segment>
+						<Button className='mt-3' color='teal' fluid size='large' onClick={() => this.redirectToInventoryFormAndUpdate()}>
+							Update Inventory List
+                        </Button>
                         <Button className='mt-3' color='teal' fluid size='large' onClick={() => this.setState({showNewItemModal: true})}>
                             Brand New Item
                         </Button>
@@ -87,8 +121,50 @@ class AddItem extends React.Component {
                 </Grid>
             </div>
         );
-    }
+	}
 
+	checkboxChanged = (itemId) => {
+		/*var found = false;
+		let temp_checkedItems = [];
+		for (var i = 0; i < this.state.checkedItems.length; i++) {
+			if (this.state.checkedItems[i] == itemId) {
+				found = true;
+				continue;
+			}
+			else {
+				temp_checkedItems.push(this.state.checkedItems[i]);
+			}
+		}
+		if (!found) {
+			temp_checkedItems.push(itemId);
+		}
+		this.setState(
+			{
+				checkedItems: temp_checkedItems
+			}
+		);*/
+	};
+
+	async redirectToInventoryFormAndUpdate() {
+		/*this.state.checkedItems.forEach(async (itemId) => {
+			if (!this.state.quantities[itemId]) {
+				await fetch(apiAddress + '/api/ItemQuantities',
+					{
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({
+							"itemQuantityId": 0,
+							"itemId": itemId,
+							"storeId": parseInt(getCookie("storeId")),
+							"amount": 0,
+							"moderateLevel": 100,
+							"urgentLevel": 200
+						})
+					});
+			}
+		});*/
+		this.props.history.push('/inventory-form');
+	};
 }
 
 export default AddItem;
