@@ -11,12 +11,10 @@ namespace SodaInventory.Model
 		public string ItemName { get; set; }
 		public string Units { get; set; }
 
-		public List<ItemAlert> ItemAlerts { get; set; }
-		public List<ItemQuantity> ItemQuantities { get; set; }
+		public virtual ICollection<ItemQuantity> ItemQuantities { get; set; }
 
 		public Item()
 		{
-			ItemAlerts = new List<ItemAlert>();
 			ItemQuantities = new List<ItemQuantity>();
 		}
 	}

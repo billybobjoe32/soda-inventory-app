@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SodaInventory.Model
 {
@@ -8,5 +9,7 @@ namespace SodaInventory.Model
 		public int? ItemId { get; set; }
 		public int? StoreId { get; set; }
 		public decimal Amount { get; set; }
+		public decimal ModerateLevel { get; set; }
+		public decimal UrgentLevel { get; set; }
 	}
 }

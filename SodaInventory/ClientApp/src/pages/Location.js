@@ -43,7 +43,6 @@ class Location extends Component {
 
         DataAccess.setCookie("storeId", selectedStoreId);
         this.setState({selectedStoreId});
-        debugger;
         document.location.href = "/";
     };
 

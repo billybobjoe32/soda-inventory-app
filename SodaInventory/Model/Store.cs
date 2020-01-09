@@ -16,13 +16,9 @@ namespace SodaInventory.Model
 		public string State { get; set; }
 		public int ZipCode { get; set; }
 
-		public List<ItemAlert> ItemAlerts { get; set; }
-		public List<ItemQuantity> ItemQuantities { get; set; }
-
 		public Store()
 		{
-			ItemAlerts = new List<ItemAlert>();
-			ItemQuantities = new List<ItemQuantity>();
+			
 		}
 	}
 }

@@ -48,9 +48,16 @@ namespace SodaInventory.Controllers
             if (id != item.ItemId)
             {
                 return BadRequest();
-            }
+			}
+			foreach (Item i in _context.Items)
+			{
+				if (i.ItemId != id && i.CompanyId == item.CompanyId && i.ItemName == item.ItemName)
+				{
+					return BadRequest("Cannot create an item with the same name within the same company.");
+				}
+			}
 
-            _context.Entry(item).State = EntityState.Modified;
+			_context.Entry(item).State = EntityState.Modified;
 
             try
             {
@@ -77,6 +84,13 @@ namespace SodaInventory.Controllers
         [HttpPost]
         public async Task<ActionResult<Item>> PostItem(Item item)
 		{
+			foreach(Item i in _context.Items)
+			{
+				if(i.CompanyId == item.CompanyId && i.ItemName == item.ItemName)
+				{
+					return BadRequest("Cannot create an item with the same name within the same company.");
+				}
+			}
 			_context.Items.Add(item);
             await _context.SaveChangesAsync();
 
