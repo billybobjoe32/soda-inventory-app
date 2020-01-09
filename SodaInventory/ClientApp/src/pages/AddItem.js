@@ -6,11 +6,11 @@ import { getCookie, apiAddress } from '../store/DataAccess';
 class AddItem extends React.Component {
 
     constructor(props) {
-        super(props);
+		super(props);
+		this.checkedItems = [];
         this.state = {
             showNewItemModal: false,
 			items: [],
-			checkedItems: [],
 			quantities: []
         };
     }
@@ -37,9 +37,9 @@ class AddItem extends React.Component {
 							});
 
 							temp_items.push(item);
+							this.checkedItems = temp_checkedItems;
 							this.setState({
 								items: temp_items,
-								checkedItems: temp_checkedItems,
 								quantities: temp_quants,
 							});
 						})
@@ -71,9 +71,9 @@ class AddItem extends React.Component {
 							temp_items.push(item);
 							this.setState({
 								items: temp_items,
-								checkedItems: temp_checkedItems,
 								quantities: temp_quants,
 							});
+							this.checkedItems = temp_checkedItems;
 						})
 				});
 			})
@@ -87,7 +87,7 @@ class AddItem extends React.Component {
 	createRows = (items, quantities) => {
 		let rows = [];
 		items.forEach((item) => {
-			rows.push(<List.Item key={item.itemName}><Checkbox onChange={this.checkboxChanged(item.itemId)} key={item.itemId} label={item.itemName} defaultChecked={quantities[item.itemId] ? true : false} /></List.Item>)
+			rows.push(<List.Item key={item.itemName}><Checkbox onClick={() => this.checkboxChanged(item.itemId)} key={item.itemId} label={item.itemName} defaultChecked={quantities[item.itemId] ? true : false} /></List.Item>)
 		});
 
 		return rows;
@@ -124,29 +124,25 @@ class AddItem extends React.Component {
 	}
 
 	checkboxChanged = (itemId) => {
-		/*var found = false;
+		var found = false;
 		let temp_checkedItems = [];
-		for (var i = 0; i < this.state.checkedItems.length; i++) {
-			if (this.state.checkedItems[i] == itemId) {
+		for (var i = 0; i < this.checkedItems.length; i++) {
+			if (this.checkedItems[i] == itemId) {
 				found = true;
 				continue;
 			}
 			else {
-				temp_checkedItems.push(this.state.checkedItems[i]);
+				temp_checkedItems.push(this.checkedItems[i]);
 			}
 		}
 		if (!found) {
 			temp_checkedItems.push(itemId);
 		}
-		this.setState(
-			{
-				checkedItems: temp_checkedItems
-			}
-		);*/
+		this.checkedItems = temp_checkedItems;
 	};
 
 	async redirectToInventoryFormAndUpdate() {
-		/*this.state.checkedItems.forEach(async (itemId) => {
+		await this.checkedItems.forEach(async (itemId) => {
 			if (!this.state.quantities[itemId]) {
 				await fetch(apiAddress + '/api/ItemQuantities',
 					{
@@ -162,7 +158,7 @@ class AddItem extends React.Component {
 						})
 					});
 			}
-		});*/
+		});
 		this.props.history.push('/inventory-form');
 	};
 }
