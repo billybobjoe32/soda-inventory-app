@@ -4,8 +4,6 @@ import {Button, Form, Header, Icon, Modal, ModalActions, ModalContent} from 'sem
 import PropTypes from 'prop-types';
 import { apiAddress, getCookie } from '../store/DataAccess';
 
-const tempAddress = "localhost:3000"
-
 class CreateItemModal extends Component {
 
     constructor(props) {
@@ -14,38 +12,42 @@ class CreateItemModal extends Component {
             name: '',
             units: '',
             moderateLevel: '',
-            urgentLevel: '',
+			urgentLevel: '',
+			itemId: 0,
             isValid: true
         }
     }
 
-    addItem = () => {
-        fetch(apiAddress + '/api/Items',
-        {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                "itemId": 0,
-                "companyId": parseInt(getCookie("itemId")),
-                "itemName": this.state.name,
-                "units": this.state.units,
-                "itemAlerts": [],
-                "itemQuantities": []
-            })
-        }).then(this.clearModal()).then(() => this.props.closeModal())
-
-        fetch(apiAddress + '/api/ItemAlerts',
-        {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                "itemAlertId": 0,
-                "itemId": 0,
-                "storeId": 0,
-                "moderateLevel": this.state.moderateLevel,
-                "urgentLevel": this.state.urgentLevel
-            })
-        })
+	addItem = async () => {
+		var results = await fetch(apiAddress + '/api/Items',
+			{
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					"itemId": 0,
+					"companyId": parseInt(getCookie("companyId")),
+					"itemName": this.state.name,
+					"units": this.state.units,
+					"itemAlerts": [],
+					"itemQuantities": []
+				})
+			}
+		);
+		var json = await results.json();
+		var itemId = json.itemId;
+		await fetch(apiAddress + '/api/ItemQuantities',
+			{
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					"itemQuantityId": 0,
+					"itemId": itemId,
+					"storeId": parseInt(getCookie("storeId")),
+					"amount": 0,
+					"moderateLevel": parseFloat(this.state.moderateLevel),
+					"urgentLevel": parseFloat(this.state.urgentLevel)
+				})
+			}).then(this.clearModal()).then(() => this.props.closeModal());
     };
 
     validate = () => {
