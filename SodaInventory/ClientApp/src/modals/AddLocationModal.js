@@ -14,7 +14,8 @@ class AddLocationModal extends Component {
             city: '',
             state: '',
             zip: '',
-            isValid: true
+            isValid: true,
+            showDelete: false,
         }
     }
 
@@ -48,7 +49,8 @@ class AddLocationModal extends Component {
             city: '',
             state: '',
             zip: '',
-            isValid: true
+            isValid: true,
+            showDelete: false,
         })
     };
 
@@ -98,6 +100,9 @@ class AddLocationModal extends Component {
                         </Segment>
                     </ModalContent>
                     <ModalActions>
+                        {this.state.showDelete && <Button primary style={{ backgroundColor: 'red', float: 'left' }} onClick={() => {
+                            this.deleteLocation();
+                        }}>Delete</Button>}
                         <Button primary onClick={() => {
                             if (this.validate())
                                 this.addLocation();
@@ -134,6 +139,24 @@ class AddLocationModal extends Component {
             }).then(this.clearModal()).then(() => this.props.closeModal())
     };
 
+    deleteLocation = () => {
+        fetch(`${apiAddress}/api/Stores/${this.state.storeId}`,
+            {
+                method: "DELETE",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    "storeId": 0,
+                    "companyId": parseInt(getCookie("companyId")),
+                    "storeName": this.state.name,
+                    "streetAddress": this.state.street,
+                    "city": this.state.city,
+                    "state": this.state.state,
+                    "zipCode": parseInt(this.state.zip)
+                })
+            }
+        ).then(this.clearModal()).then(() => this.props.closeModal())
+    }
+
     loadData = () => {
         fetch(`${apiAddress}/api/Stores/${this.props.editStoreId}`)
             .then(response => response.json())
@@ -144,7 +167,8 @@ class AddLocationModal extends Component {
                     street: data.streetAddress,
                     city: data.city,
                     state: data.state,
-                    zip: data.zipCode
+                    zip: data.zipCode,
+                    showDelete: true,
                 });
                 this.props.clearRequest();
             })
