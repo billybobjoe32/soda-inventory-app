@@ -33,6 +33,7 @@ class InventoryForm extends Component {
 									temp_quants[item.itemId] = quant;
 								}
 							});
+							temp_items.sort((a, b) => a.itemName.localeCompare(b.itemName));
 
 							this.setState({
 								items: temp_items,
@@ -79,7 +80,7 @@ class InventoryForm extends Component {
 						<Grid.Column style={{ width: '100%', maxWidth: 650 }}>
 							<Form>
 								{this.state.items.map((item) =>
-									<div className='p-3'>
+									<div key={item.itemId} className='p-3'>
 										<Grid.Row style={{ marginBottom: 20 }}>
 											<Grid.Column style={{ width: '50%' }}>
 												<Grid.Row>
