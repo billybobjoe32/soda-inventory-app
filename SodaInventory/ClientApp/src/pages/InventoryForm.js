@@ -124,11 +124,11 @@ class InventoryForm extends Component {
                                 <Grid.Row>
                                     <Grid.Column style={{ width: '50%' }}>
                                         <Button primary circular icon="add" onClick={() => this.redirectToAddItem()}
-                                            style={{ marginLeft: 10 }}></Button>
+                                            style={{ float: 'left', marginLeft: 50 }}></Button>
                                     </Grid.Column>
                                     <Grid.Column style={{ width: '50%' }}>
                                         <Button primary onClick={() => { this.updateInventory(); this.clear(); this.getInventory(); }}
-                                            style={{ float: 'left', marginLeft: 60 }}>Save</Button>
+                                            style={{ float: 'left', marginLeft: 5}}>Save</Button>
                                     </Grid.Column>
                                 </Grid.Row>
 							</Form>
