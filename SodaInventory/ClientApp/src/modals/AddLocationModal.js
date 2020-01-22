@@ -151,7 +151,7 @@ class AddLocationModal extends Component {
                     "streetAddress": this.state.street,
                     "city": this.state.city,
                     "state": this.state.state,
-                    "zipCode": parseInt(this.state.zip)
+                    "zipCode": parseInt(this.state.zip),
                 })
             }
         ).then(this.clearModal()).then(() => this.props.closeModal())
