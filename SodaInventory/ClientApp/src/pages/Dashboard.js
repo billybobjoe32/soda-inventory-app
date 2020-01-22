@@ -15,7 +15,7 @@ import {
 } from "semantic-ui-react";
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import ItemModal from "../modals/ItemModal";
-import {apiAddress} from "../store/DataAccess";
+import {apiAddress, getCookie} from "../store/DataAccess";
 
 class Dashboard extends Component {
 
@@ -131,7 +131,7 @@ class Dashboard extends Component {
     }
 
     loadData = () => {
-        fetch(`${apiAddress}/api/Inventory/`)
+        fetch(`${apiAddress}/api/Inventory/?storeId=${getCookie("storeId")}`)
             .then(response => response.json())
             .then(data => {
                 let urgent = [];

@@ -36,7 +36,6 @@ namespace SodaInventory.Controllers
                     itemQty.ModerateLevel,
                     itemQty.UrgentLevel,
                     Uom = items.Units
-
                 }
                 )
                 .GroupBy(item => new { item.ItemId, item.Uom , item.ModerateLevel, item.UrgentLevel, item.ItemName})
