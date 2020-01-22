@@ -58,6 +58,7 @@ class InventoryForm extends Component {
             quantities: [],
             amounts: []
         });
+        this.getInventory();
     }
 
     updateInventory = () => {
