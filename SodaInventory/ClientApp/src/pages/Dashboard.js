@@ -53,8 +53,7 @@ class Dashboard extends Component {
             cells.push(
                 <TableRow key={element.itemId} onClick={() => this.setState({showItemModal: true})}>
                     <TableCell>{element.itemName}</TableCell>
-                    <TableCell>{element.amount}</TableCell>
-                    <TableCell>{element.uom}</TableCell>
+                    <TableCell>{element.amount} ({element.uom})</TableCell>
                 </TableRow>
             );
         });
@@ -68,7 +67,6 @@ class Dashboard extends Component {
                 <TableRow>
                     <TableHeaderCell>Item</TableHeaderCell>
                     <TableHeaderCell>Qty</TableHeaderCell>
-                    <TableHeaderCell>Uom</TableHeaderCell>
                 </TableRow>
             </TableHeader>;
 
