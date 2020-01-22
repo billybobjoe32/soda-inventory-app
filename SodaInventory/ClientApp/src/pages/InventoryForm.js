@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { apiAddress, getCookie } from '../store/DataAccess';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {apiAddress, getCookie} from '../store/DataAccess';
 import * as InventoryStore from '../store/Inventory';
-import { Button, Form, Grid, Header, Icon, Segment } from 'semantic-ui-react';
-import { Redirect } from 'react-router-dom'
+import {Button, Form, Grid, Header, Icon, Segment} from 'semantic-ui-react';
 
 class InventoryForm extends Component {
 
@@ -55,7 +54,9 @@ class InventoryForm extends Component {
 						"itemQuantityId": quant.itemQuantityId,
 						"itemId": quant.itemId,
 						"storeId": quant.storeId,
-						"amount": parseInt(quantities[quant.itemId])
+						"amount": parseInt(quantities[quant.itemId]),
+						"moderateLevel": quant.moderateLevel,
+						"urgentLevel": quant.urgentLevel,
 					})
 				})
 		});
