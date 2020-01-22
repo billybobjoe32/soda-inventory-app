@@ -22,7 +22,7 @@ namespace SodaInventory.Controllers
 
         // GET: api/GetInventory
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<object>>> GetInventory()
+        public async Task<ActionResult<IEnumerable<object>>> GetInventory(int storeId)
         { 
             return await _context.ItemQuantities.Join(
                 _context.Items,
@@ -35,17 +35,19 @@ namespace SodaInventory.Controllers
                     itemQty.Amount,
                     itemQty.ModerateLevel,
                     itemQty.UrgentLevel,
-                    Uom = items.Units
+                    Uom = items.Units,
+                    itemQty.StoreId
                 }
                 )
+                .Where(item => item.StoreId == storeId)
                 .GroupBy(item => new { item.ItemId, item.Uom , item.ModerateLevel, item.UrgentLevel, item.ItemName})
-                .Select(item => new {
+                .Select(item => new Inventory {
                     ItemId = item.Key.ItemId ?? default,
                     Amount = item.Sum(item => item.Amount),
-                    item.Key.Uom,
-                    item.Key.ModerateLevel,
-                    item.Key.UrgentLevel,
-                    item.Key.ItemName
+                    Uom = item.Key.Uom,
+                    ModerateLevel = item.Key.ModerateLevel,
+                    UrgentLevel = item.Key.UrgentLevel,
+                    ItemName = item.Key.ItemName
                 })
                 .ToListAsync();
         }
