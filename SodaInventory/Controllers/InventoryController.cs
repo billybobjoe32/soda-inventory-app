@@ -41,7 +41,7 @@ namespace SodaInventory.Controllers
                 )
                 .Where(item => item.StoreId == storeId)
                 .GroupBy(item => new { item.ItemId, item.Uom , item.ModerateLevel, item.UrgentLevel, item.ItemName})
-                .Select(item => new Inventory {
+                .Select(item => new {
                     ItemId = item.Key.ItemId ?? default,
                     Amount = item.Sum(item => item.Amount),
                     Uom = item.Key.Uom,
