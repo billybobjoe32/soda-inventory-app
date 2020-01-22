@@ -22,7 +22,7 @@ namespace SodaInventory.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Item>>> GetItems(int companyId)
         {
-            return await _context.Items.Where(i => i.CompanyId == companyId).ToListAsync();
+            return await _context.Items.Where(i => i.CompanyId == companyId).OrderBy(item => item.ItemName).ToListAsync();
         }
 
         // GET: api/Items/5

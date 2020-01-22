@@ -37,6 +37,7 @@ class AddItem extends React.Component {
 							});
 
 							temp_items.push(item);
+							temp_items.sort((a, b) => a.itemName.localeCompare(b.itemName));
 							this.checkedItems = temp_checkedItems;
 							this.setState({
 								items: temp_items,
@@ -44,7 +45,7 @@ class AddItem extends React.Component {
 							});
 						})
 				});
-			})
+			});
     }
 
 	componentDidMount() {
@@ -69,6 +70,7 @@ class AddItem extends React.Component {
 							});
 
 							temp_items.push(item);
+							temp_items.sort((a, b) => a.itemName.localeCompare(b.itemName));
 							this.setState({
 								items: temp_items,
 								quantities: temp_quants,
@@ -76,7 +78,7 @@ class AddItem extends React.Component {
 							this.checkedItems = temp_checkedItems;
 						})
 				});
-			})
+			});
     }
 
     closeModal = () => {
