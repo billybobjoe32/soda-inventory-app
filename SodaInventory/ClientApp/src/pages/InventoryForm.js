@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { apiAddress, getCookie } from '../store/DataAccess';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {apiAddress, getCookie} from '../store/DataAccess';
 import * as InventoryStore from '../store/Inventory';
-import { Button, Form, Grid, Header, Icon, Segment } from 'semantic-ui-react';
-import { Redirect } from 'react-router-dom'
+import {Button, Form, Grid, Header, Icon, Segment} from 'semantic-ui-react';
 
 class InventoryForm extends Component {
 
@@ -62,7 +61,6 @@ class InventoryForm extends Component {
     }
 
     updateInventory = () => {
-        let temp_amounts = [];
 		this.state.quantities.forEach(quant => {
 			fetch(apiAddress + '/api/ItemQuantities/' + quant.itemQuantityId,
 				{
@@ -72,7 +70,9 @@ class InventoryForm extends Component {
 						"itemQuantityId": quant.itemQuantityId,
 						"itemId": quant.itemId,
 						"storeId": quant.storeId,
-						"amount": Number(quant.amount)
+						"amount": Number(quant.amount),
+						"moderateLevel": quant.moderateLevel,
+						"urgentLevel": quant.urgentLevel,
 					})
                 })
         });
@@ -95,7 +95,7 @@ class InventoryForm extends Component {
 						<Grid.Column style={{ width: '100%', maxWidth: 650 }}>
 							<Form>
 								{this.state.items.map((item) =>
-									<div className='p-3'>
+									<div key={item.itemId} className='p-3'>
 										<Grid.Row style={{ marginBottom: 20 }}>
 											<Grid.Column style={{ width: '50%' }}>
 												<Grid.Row>

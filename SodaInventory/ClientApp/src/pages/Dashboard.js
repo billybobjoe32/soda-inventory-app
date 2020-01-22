@@ -15,6 +15,7 @@ import {
 } from "semantic-ui-react";
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import ItemModal from "../modals/ItemModal";
+import {apiAddress, getCookie} from "../store/DataAccess";
 
 class Dashboard extends Component {
 
@@ -24,9 +25,9 @@ class Dashboard extends Component {
             colors: ['red', 'yellow', 'green'],
             currentIndexColor: 'red',
             showItemModal: false,
-            urgent: [{id: 1, item: "napkins", qty: 5}, {id: 2, item: "cups", qty: 10}, {id: 3, item: "spoons", qty: 50}],
-            moderate: [{id: 4, item: "paper", qty: 5}, {id: 5, item: "containers", qty: 10}],
-            good: [{id: 6, item: "drinks", qty: 1000}],
+            urgent: [],
+            moderate: [],
+            good: [],
         }
     }
 
@@ -34,6 +35,8 @@ class Dashboard extends Component {
         if (window.location.pathname + window.location.search !== '/') {
             window.location.href = '/'
         }
+
+        this.loadData()
     }
 
     handleTabChange = (e, data) => {
@@ -48,16 +51,15 @@ class Dashboard extends Component {
         let cells = [];
         data.forEach((element) => {
             cells.push(
-                <TableRow key={element.id} onClick={() => this.setState({showItemModal: true})}>
-                    <TableCell>{element.item}</TableCell>
-                    <TableCell>{element.qty}</TableCell>
+                <TableRow key={element.itemId} onClick={() => this.setState({showItemModal: true})}>
+                    <TableCell>{element.itemName}</TableCell>
+                    <TableCell>{element.amount} ({element.uom})</TableCell>
                 </TableRow>
             );
         });
 
         return cells;
     };
-
 
     render() {
         let tableHeader =
@@ -124,6 +126,32 @@ class Dashboard extends Component {
                 </Segment>
             </div>
         );
+    }
+
+    loadData = () => {
+        fetch(`${apiAddress}/api/Inventory/?storeId=${getCookie("storeId")}`)
+            .then(response => response.json())
+            .then(data => {
+                let urgent = [];
+                let moderate = [];
+                let good = [];
+
+                data.forEach(item => {
+                    if (item.amount <= item.moderateLevel && item.amount > item.urgentLevel) {
+                        moderate.push(item)
+                    } else if (item.amount <= item.urgentLevel) {
+                        urgent.push(item)
+                    } else {
+                        good.push(item)
+                    }
+                });
+
+                this.setState({
+                    urgent,
+                    moderate,
+                    good
+                });
+            })
     }
 }
 
