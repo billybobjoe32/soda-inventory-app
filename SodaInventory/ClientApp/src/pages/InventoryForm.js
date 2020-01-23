@@ -41,6 +41,7 @@ class InventoryForm extends Component {
                             });
                         })
                         .then(() => {
+							temp_items.sort((a, b) => a.itemName.localeCompare(b.itemName));
                             this.setState({
                                 items: temp_items,
                                 quantities: temp_quants,
