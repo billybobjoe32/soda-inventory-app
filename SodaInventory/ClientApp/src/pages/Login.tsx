@@ -1,4 +1,4 @@
-﻿import * as React from 'react';
+import * as React from 'react';
 import {connect} from 'react-redux';
 import {setCookie} from '../store/DataAccess';
 import {Button, Form, Grid, Header, Image, Message, Segment} from 'semantic-ui-react'
@@ -36,7 +36,7 @@ class Login extends React.Component {
 						</Segment>
 					</Form>
 					<Message>
-						New to us? <a href='#'>Sign Up</a>
+						New to us? <a href='./signup'>Sign Up</a>
 					</Message>
 				</Grid.Column>
 			</Grid>
