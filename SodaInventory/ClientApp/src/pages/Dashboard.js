@@ -51,7 +51,7 @@ class Dashboard extends Component {
         let cells = [];
         data.forEach((element) => {
             cells.push(
-                <TableRow key={element.itemId} onClick={() => this.setState({showItemModal: true})}>
+                <TableRow key={element.itemId} onClick={() => this.setState({showItemModal: true})} >
                     <TableCell>{element.itemName}</TableCell>
                     <TableCell>{element.amount} ({element.uom})</TableCell>
                 </TableRow>
@@ -65,8 +65,8 @@ class Dashboard extends Component {
         let tableHeader =
             <TableHeader>
                 <TableRow>
-                    <TableHeaderCell>Item</TableHeaderCell>
-                    <TableHeaderCell>Qty</TableHeaderCell>
+                    <TableHeaderCell width={10}>Item</TableHeaderCell>
+                    <TableHeaderCell width={1}>Qty</TableHeaderCell>
                 </TableRow>
             </TableHeader>;
 
@@ -74,7 +74,7 @@ class Dashboard extends Component {
             {
                 menuItem: {key: 'urgent', icon: 'warning circle', content: 'Urgent'},
                 render: () =>
-                    <Table celled selectable>
+                    <Table celled selectable striped>
                         {tableHeader}
                         <TableBody>
                             {this.createRows(this.state.urgent)}
@@ -85,7 +85,7 @@ class Dashboard extends Component {
             {
                 menuItem: {key: 'moderate', icon: 'warning sign', content: 'Moderate'},
                 render: () =>
-                    <Table celled>
+                    <Table celled striped>
                         {tableHeader}
                         <TableBody>
                             {this.createRows(this.state.moderate)}
@@ -95,7 +95,7 @@ class Dashboard extends Component {
             {
                 menuItem: {key: 'good', icon: 'checkmark', content: 'Good'},
                 render: () =>
-                    <Table celled>
+                    <Table celled striped>
                         {tableHeader}
                         <TableBody>
                             {this.createRows(this.state.good)}
