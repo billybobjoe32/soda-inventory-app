@@ -27,8 +27,8 @@ namespace SodaInventory.Controllers
         {
             return await _context.Audits
                 .Where(a => a.TableName == "Items"
-                && a.NewValues.Contains($"\"CompanyId\":{companyId}")
-                && a.NewValues.Contains($"\"ItemId\":{itemId}"))
+                && a.NewValues.Contains($"\"CompanyId\":{companyId},")
+                && a.KeyValues.Contains($"\"ItemId\":{itemId}}}"))
                 .ToListAsync();
         }
 
@@ -39,8 +39,8 @@ namespace SodaInventory.Controllers
         {
             return await _context.Audits
                 .Where(a => a.TableName == "ItemQuantities" 
-                && a.NewValues.Contains($"\"StoreId\":{storeId}") 
-                && a.NewValues.Contains($"\"ItemId\":{itemId}"))
+                && a.NewValues.Contains($"\"StoreId\":{storeId},") 
+                && a.NewValues.Contains($"\"ItemId\":{itemId},"))
                 .ToListAsync();
         }
     }
