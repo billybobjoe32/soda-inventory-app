@@ -20,8 +20,8 @@ namespace SodaInventory.Controllers
         [HttpPost("registrant")]
         public void Register([FromBody]JObject registrantMap)
         {
-            Emailer emailer = new Emailer(registrantMap["email"].ToObject<String>());
-            emailer.sendEmail();
+            Emailer emailer = new Emailer();
+            emailer.sendEmail(registrantMap["email"].ToObject<String>(), registrantMap["company"].ToObject<String>());
         }
     }
 }
