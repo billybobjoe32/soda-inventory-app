@@ -17,6 +17,7 @@ namespace SodaInventory.Model
 		public DbSet<Item> Items { get; set; }
 		public DbSet<ItemQuantity> ItemQuantities { get; set; }
 		public DbSet<Audit> Audits { get; set; }
+		public DbSet<Registration> Registrations { get; set; }
 
 		public DatabaseContext(DbContextOptions options) : base(options)
 		{

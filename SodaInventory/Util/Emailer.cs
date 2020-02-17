@@ -19,10 +19,10 @@ namespace SodaInventory.Model
         {
         }
 
-        public void sendEmail(String email, String company)
+        public void sendEmail(Registration registration)
         {
             using var message = new MailMessage();
-            message.To.Add(new MailAddress(email, "To-Test"));
+            message.To.Add(new MailAddress(registration.Email, "To-Test"));
             message.From = (new MailAddress("sodarushdev@gmail.com", "Soda Rush Development"));
             message.Subject = "Subject";
             
@@ -32,11 +32,19 @@ namespace SodaInventory.Model
                 builder.Append(reader.ReadToEnd());
             }
 
-            builder.Replace("{{company}}", company);
+            builder.Replace("{{company}}", registration.CompanyName);
+            if (Util.IS_DEV)
+            {
+                builder.Replace("{{domain}}", Util.DEVELOPMENT_URL);
+            }
+            else
+            {
+                builder.Replace("{{domain}}", Util.PRODUCTION_URL);
+            }
+
+            builder.Replace("{{registrationCode}}", registration.RegistrationCode);
+            
             message.Body = builder.ToString();
-                
-                
-                
             message.IsBodyHtml = true;
 
             using var client = new SmtpClient("smtp.gmail.com");
