@@ -27,7 +27,10 @@ namespace SodaInventory
 			{
 				configuration.RootPath = "ClientApp/build";
 			});
-			services.AddControllers();
+			services.AddMvc()
+				.AddNewtonsoftJson();
+			services.AddControllers()
+				.AddNewtonsoftJson();
 
 			// Register the Swagger generator, defining 1 or more Swagger documents
 			services.AddSwaggerGen(c =>
