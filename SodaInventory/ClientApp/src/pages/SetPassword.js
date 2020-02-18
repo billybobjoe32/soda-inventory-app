@@ -63,13 +63,18 @@ class SetPassword extends React.Component {
     }
 
     createUser = () => {
-        fetch(`${apiAddress}/api/Registration/registrant`, {
+        let payload = {
+            token: document.location.href.substring(document.location.href.lastIndexOf('/') + 1),
+            password: this.state.password
+        };
+
+        fetch(`${apiAddress}/api/Registration/finalize`, {
         	method: "POST",
 			headers: {'Content-Type': 'application/json'},
-			body: JSON.stringify(this.state)
+			body: JSON.stringify(payload)
 		})
-			// .then(() => document.location.href = "/email-sent")
-    }
+            .finally(() => document.location.href="./login")
+    };
 
     validateToken = () => {
         fetch(`${apiAddress}/api/Registration/validate/${document.location.href.substring(document.location.href.lastIndexOf('/') + 1)}`)

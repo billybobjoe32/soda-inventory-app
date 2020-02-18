@@ -12,7 +12,6 @@ namespace SodaInventory.Controllers
     [ApiController]
     public class RegistrationController : ControllerBase
     {
-        private static int count = 0;
         private readonly DatabaseContext _context;
 
         public RegistrationController(DatabaseContext context)
@@ -35,12 +34,26 @@ namespace SodaInventory.Controllers
             _context.SaveChanges();
         }
 
-        // GET: api/finalize
-        [HttpPost("finalize/{token}")]
-        public void Finalize(String token)
+        // POST: api/finalize
+        [HttpPost("finalize")]
+        public void Finalize([FromBody]JObject registerUserMap)
         {
-            // Add password to the api call
-            Console.WriteLine("Registering User" + count++);
+            var registrations = from registration in _context.Registrations select registration;
+            registrations = registrations.Where(s => s.RegistrationCode.Equals(registerUserMap["token"].ToObject<String>()));
+            var registrationObject = registrations.ToList()[0];
+            
+            var company = new Company {CompanyName = registrationObject.CompanyName};
+            _context.Companies.Add(company);
+            _context.SaveChanges();
+
+            var user = new User
+            {
+                Email = registrationObject.Email,
+                Password = registerUserMap["password"].ToObject<String>(),
+                CompanyId = company.CompanyId
+            };
+            _context.Users.Add(user);
+            _context.SaveChanges();
         }
 
         // GET: api/validate
