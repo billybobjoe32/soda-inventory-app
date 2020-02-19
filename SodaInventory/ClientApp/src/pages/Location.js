@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { Component } from 'react';
+import {Component} from 'react';
 import * as DataAccess from '../store/DataAccess';
-import { Button, Card, Container, Header, Icon, Modal, ModalActions, Segment } from 'semantic-ui-react';
+import {apiAddress} from '../store/DataAccess';
+import {Button, Card, Container, Header, Icon, Modal, ModalActions, Segment} from 'semantic-ui-react';
 import AddLocation from "../modals/AddLocationModal";
 
 class Location extends Component {
@@ -103,9 +104,16 @@ class Location extends Component {
 	}
 
 	logout = () => {
+		let token = sessionStorage.getItem("token");
 		DataAccess.clearCookies();
 		sessionStorage.clear();
-		document.location.href = "/login"
+
+		fetch(`${apiAddress}/api/Users/logout`, {
+			method: "POST",
+			headers: {'Content-Type': 'application/json'},
+			body: JSON.stringify({token})
+		})
+			.finally(() => document.location.href = "/login")
 	};
 
 	loadData = () => {

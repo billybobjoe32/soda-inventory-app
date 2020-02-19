@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import {Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink} from 'reactstrap';
+import {Link} from 'react-router-dom';
 import * as DataAccess from '../store/DataAccess';
+import {apiAddress, getCookie} from '../store/DataAccess';
 import '../css/NavMenu.css';
-import { getCookie, apiAddress } from '../store/DataAccess';
 
 export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean, storeName: string }> {
 	public state = {
@@ -45,8 +45,16 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean, 
 	}
 
 	private logout = () => {
+		let token = sessionStorage.getItem("token");
 		DataAccess.clearCookies();
 		sessionStorage.clear();
+
+		fetch(`${apiAddress}/api/Users/logout`, {
+			method: "POST",
+			headers: {'Content-Type': 'application/json'},
+			body: JSON.stringify({token})
+		})
+			.then(() => document.location.href = "/login")
 	};
 
 	private toggle = () => {
