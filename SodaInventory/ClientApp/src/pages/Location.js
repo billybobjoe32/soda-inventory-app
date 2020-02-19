@@ -14,6 +14,7 @@ class Location extends Component {
 			selectedStoreId: DataAccess.getCookie("storeId"),
 			editStoreId: null,
 			showAddLocationModal: false,
+			loading: false
 		}
 	}
 
@@ -96,7 +97,7 @@ class Location extends Component {
 						</Segment>
 					</Modal.Content>
 					<ModalActions>
-						<Button onClick={this.logout}>Logout</Button>
+						<Button onClick={this.logout} loading={this.state.loading}>Logout</Button>
 					</ModalActions>
 				</Modal>
 			</div>
@@ -104,6 +105,7 @@ class Location extends Component {
 	}
 
 	logout = () => {
+		this.setState({loading: true});
 		let token = sessionStorage.getItem("token");
 		DataAccess.clearCookies();
 		sessionStorage.clear();
@@ -113,7 +115,10 @@ class Location extends Component {
 			headers: {'Content-Type': 'application/json'},
 			body: JSON.stringify({token})
 		})
-			.finally(() => document.location.href = "/login")
+			.finally(() => {
+				this.setState({loading: false});
+				document.location.href = "/login";
+			})
 	};
 
 	loadData = () => {

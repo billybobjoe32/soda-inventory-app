@@ -4,6 +4,7 @@ import Location from '../pages/Location';
 import LoggedIn from './Secured';
 
 import '../custom.css'
+import 'react-s-alert/dist/s-alert-default.css';
 
 import {BrowserRouter} from "react-router-dom";
 import React, {Component} from 'react';
