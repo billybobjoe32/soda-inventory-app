@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SodaInventory.Model;
@@ -23,33 +22,162 @@ namespace SodaInventory.Controllers
         // GET: api/GetInventory
         [HttpGet]
         public async Task<ActionResult<IEnumerable<object>>> GetInventory(int storeId)
-        { 
+        {
             return await _context.ItemQuantities.Join(
                 _context.Items,
                 items => items.ItemId,
                 itemQty => itemQty.ItemId,
                 (itemQty, items) => new
                 {
+                    items.CompanyId,
                     itemQty.ItemId,
+                    itemQty.ItemQuantityId,
+                    itemQty.StoreId,
                     items.ItemName,
+                    items.Units,
                     itemQty.Amount,
                     itemQty.ModerateLevel,
                     itemQty.UrgentLevel,
-                    Uom = items.Units,
-                    itemQty.StoreId
+                    itemQty.LastUpdated
                 }
                 )
                 .Where(item => item.StoreId == storeId)
-                .GroupBy(item => new { item.ItemId, item.Uom , item.ModerateLevel, item.UrgentLevel, item.ItemName})
+                .GroupBy(item => new { 
+                    item.CompanyId, 
+                    item.ItemId, 
+                    item.ItemQuantityId,
+                    item.StoreId,
+                    item.ItemName,
+                    item.Units,
+                    item.Amount,
+                    item.ModerateLevel, 
+                    item.UrgentLevel,
+                    item.LastUpdated})
                 .Select(item => new {
+                    CompanyId = item.Key.CompanyId,
                     ItemId = item.Key.ItemId ?? default,
-                    Amount = item.Sum(item => item.Amount),
-                    Uom = item.Key.Uom,
+                    ItemQuantityId = item.Key.ItemQuantityId,
+                    StoreId = item.Key.StoreId ?? default,
+                    ItemName = item.Key.ItemName,
+                    Uom = item.Key.Units,
+                    Amount = item.Key.Amount,//Amount = item.Sum(item => item.Amount),
                     ModerateLevel = item.Key.ModerateLevel,
                     UrgentLevel = item.Key.UrgentLevel,
-                    ItemName = item.Key.ItemName
+                    LastUpdated = item.Key.LastUpdated
                 })
                 .ToListAsync();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<InventoryEntry>> PostInventoryEntry(InventoryEntry ie)
+        {
+            bool itemCreated = false;
+            if (ie.ItemId == 0)
+            {
+                itemCreated = true;
+                _context.Items.Add(ie.ToItem());
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                var currentItem = await _context.Items.FindAsync(ie.ItemId);
+                Item postedItem = ie.ToItem();
+                if (currentItem != null && !currentItem.Equals(postedItem))
+                {
+                    _context.Entry(postedItem).State = EntityState.Modified;
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!ItemExists(currentItem.ItemId))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                }
+            }
+            if (!ie.LastUpdated.HasValue)
+            {
+                ie.LastUpdated = DateTime.UtcNow;
+            }
+            if (ie.ItemQuantityId == 0)
+            {
+                itemCreated = true;
+                _context.ItemQuantities.Add(ie.ToItemQuantity());
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                var currentItemQuantity = await _context.ItemQuantities.FindAsync(ie.ItemQuantityId);
+                ItemQuantity postedIq = ie.ToItemQuantity();
+                if (currentItemQuantity != null && !currentItemQuantity.Equals(postedIq))
+                {
+                    _context.Entry(postedIq).State = EntityState.Modified;
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!ItemQuantityExists(currentItemQuantity.ItemQuantityId))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                }
+            }
+            return CreatedAtAction("GetInventoryEntry", new { id = ie.ItemId }, ie);
+        }
+
+        private bool ItemExists(int id)
+        {
+            return _context.Items.Any(e => e.ItemId == id);
+        }
+
+        private bool ItemQuantityExists(int id)
+        {
+            return _context.ItemQuantities.Any(e => e.ItemQuantityId == id);
+        }
+
+        [HttpGet]
+        [Route("GetAllInventoryItems")]
+        public async Task<ActionResult<IEnumerable<object>>> GetAllItems(int companyId, int storeId)
+        {
+            List<object> returningQuantities = new List<object>();
+            List<Item> items = await _context.Items.Where(i => i.CompanyId == companyId).OrderBy(item => item.ItemName).ToListAsync();
+            foreach (Item i in items)
+            {
+                List<ItemQuantity> itemQuantities = await _context.ItemQuantities.Where(iq => iq.ItemId == i.ItemId && iq.StoreId == storeId).ToListAsync();
+                if (itemQuantities.Count > 0)
+                {
+                    returningQuantities.Add(new
+                    {
+                        StoreId = storeId,
+                        ItemId = i.ItemId,
+                        ItemName = i.ItemName
+                    });
+                }
+                else
+                {
+                    returningQuantities.Add(new
+                    {
+                        StoreId = 0,
+                        ItemId = i.ItemId,
+                        ItemName = i.ItemName
+                    });
+                }
+            }
+            return returningQuantities;
         }
     }
 }

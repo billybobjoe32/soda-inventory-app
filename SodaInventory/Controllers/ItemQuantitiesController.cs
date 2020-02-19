@@ -51,7 +51,10 @@ namespace SodaInventory.Controllers
             {
                 return BadRequest();
             }
-
+            if (!itemQuantity.LastUpdated.HasValue)
+            {
+                itemQuantity.LastUpdated = DateTime.UtcNow;
+            }
             _context.Entry(itemQuantity).State = EntityState.Modified;
 
             try
@@ -79,6 +82,10 @@ namespace SodaInventory.Controllers
         [HttpPost]
         public async Task<ActionResult<ItemQuantity>> PostItemQuantity(ItemQuantity itemQuantity)
         {
+            if(!itemQuantity.LastUpdated.HasValue)
+            {
+                itemQuantity.LastUpdated = DateTime.UtcNow;
+            }
             _context.ItemQuantities.Add(itemQuantity);
             await _context.SaveChangesAsync();
 

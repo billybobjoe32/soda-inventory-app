@@ -17,5 +17,18 @@ namespace SodaInventory.Model
 		{
 			ItemQuantities = new List<ItemQuantity>();
 		}
+
+		public override bool Equals(object obj)
+		{
+			if(obj == null || !this.GetType().Equals(obj.GetType()))
+			{
+				return false;
+			}
+			Item item = (Item)obj;
+			return (item.ItemId == this.ItemId &&
+					item.CompanyId == this.CompanyId &&
+					item.ItemName == this.ItemName &&
+					item.Units == this.Units);
+		}
 	}
 }
