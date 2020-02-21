@@ -116,6 +116,27 @@ namespace SodaInventory.Migrations
                     b.ToTable("ItemQuantities");
                 });
 
+            modelBuilder.Entity("SodaInventory.Model.Registration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CompanyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RegistrationCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Registrations");
+                });
+
             modelBuilder.Entity("SodaInventory.Model.Store", b =>
                 {
                     b.Property<int>("StoreId")

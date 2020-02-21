@@ -139,26 +139,6 @@ namespace SodaInventory.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Registrations",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CompanyName = table.Column<string>(nullable: false),
-                    Email = table.Column<string>(nullable: false),
-                    RegistrationCode = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_id", x => x.Id);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Registrations_Id",
-                table: "Registrations",
-                column: "Id");
-
             migrationBuilder.CreateIndex(
                 name: "IX_ItemAlerts_ItemId",
                 table: "ItemAlerts",
@@ -214,9 +194,6 @@ namespace SodaInventory.Migrations
 
             migrationBuilder.DropTable(
                 name: "Companies");
-
-            migrationBuilder.DropTable(
-                name: "Registration");
         }
     }
 }
