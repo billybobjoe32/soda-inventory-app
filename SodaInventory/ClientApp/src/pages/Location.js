@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { Component } from 'react';
+import {Component} from 'react';
 import * as DataAccess from '../store/DataAccess';
-import { Button, Card, Container, Header, Icon, Modal, ModalActions, Segment } from 'semantic-ui-react';
+import {apiAddress} from '../store/DataAccess';
+import {Button, Card, Container, Header, Icon, Modal, ModalActions, Segment} from 'semantic-ui-react';
 import AddLocation from "../modals/AddLocationModal";
 
 class Location extends Component {
@@ -13,6 +14,7 @@ class Location extends Component {
 			selectedStoreId: DataAccess.getCookie("storeId"),
 			editStoreId: null,
 			showAddLocationModal: false,
+			loading: false
 		}
 	}
 
@@ -95,7 +97,7 @@ class Location extends Component {
 						</Segment>
 					</Modal.Content>
 					<ModalActions>
-						<Button onClick={this.logout}>Logout</Button>
+						<Button onClick={this.logout} loading={this.state.loading}>Logout</Button>
 					</ModalActions>
 				</Modal>
 			</div>
@@ -103,9 +105,20 @@ class Location extends Component {
 	}
 
 	logout = () => {
+		this.setState({loading: true});
+		let token = sessionStorage.getItem("token");
 		DataAccess.clearCookies();
 		sessionStorage.clear();
-		document.location.href = "/login"
+
+		fetch(`${apiAddress}/api/Users/logout`, {
+			method: "POST",
+			headers: {'Content-Type': 'application/json'},
+			body: JSON.stringify({token})
+		})
+			.finally(() => {
+				this.setState({loading: false});
+				document.location.href = "/login";
+			})
 	};
 
 	loadData = () => {

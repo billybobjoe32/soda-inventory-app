@@ -27,7 +27,10 @@ namespace SodaInventory
 			{
 				configuration.RootPath = "ClientApp/build";
 			});
-			services.AddControllers();
+			services.AddMvc()
+				.AddNewtonsoftJson();
+			services.AddControllers()
+				.AddNewtonsoftJson();
 
 			// Register the Swagger generator, defining 1 or more Swagger documents
 			services.AddSwaggerGen(c =>
@@ -44,10 +47,12 @@ namespace SodaInventory
 		{
 			if (env.IsDevelopment())
 			{
+				Util.IS_DEV = true;
 				app.UseDeveloperExceptionPage();
 			}
 			else
 			{
+				Util.IS_DEV = false;
 				app.UseExceptionHandler("/Error");
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();

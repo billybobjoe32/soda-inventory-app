@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SodaInventory.Model;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace SodaInventory.Controllers
 {
@@ -129,6 +131,30 @@ namespace SodaInventory.Controllers
         private bool UserExists(string id)
         {
             return _context.Users.Any(e => e.Email == id);
+        }
+
+        [HttpPost("login")]
+        public Object Login([FromBody] JObject login)
+        {
+            var user = _context.Users.Find(login["email"].ToObject<String>());
+            string token = null;
+            if (user?.Password == login["password"].ToObject<String>())
+            {
+                token = System.Guid.NewGuid().ToString();
+                Authentication.TokenList.Add(token);
+            }
+
+            return new
+            {
+                token = token,
+                companyId = user?.CompanyId
+            };
+        }
+
+        [HttpPost("logout")]
+        public void Logout([FromBody] JObject token)
+        {
+            Authentication.TokenList.Remove(token["token"].ToObject<String>());
         }
     }
 }
