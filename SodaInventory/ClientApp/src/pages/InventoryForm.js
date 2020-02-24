@@ -12,7 +12,7 @@ class InventoryForm extends Component {
 			items: [],
             quantities: [],
             amounts: [],
-			isValid: true
+            isValid: true
 		}
 	}
 
@@ -128,7 +128,7 @@ class InventoryForm extends Component {
                                             style={{ float: 'left', marginLeft: 50 }}></Button>
                                     </Grid.Column>
                                     <Grid.Column style={{ width: '50%' }}>
-                                        <Button primary onClick={() => { this.updateInventory(); this.clear(); this.getInventory(); }}
+                                        <Button primary onClick={() => { this.updateInventory(); this.getInventory(); this.clear(); }}
                                             style={{ float: 'left', marginLeft: 5}}>Save</Button>
                                     </Grid.Column>
                                 </Grid.Row>

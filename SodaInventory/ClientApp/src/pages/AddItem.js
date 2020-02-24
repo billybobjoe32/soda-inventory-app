@@ -7,11 +7,13 @@ class AddItem extends React.Component {
 
     constructor(props) {
 		super(props);
-		this.checkedItems = [];
+        this.checkedItems = [];
+        this.removeItems = [];
         this.state = {
             showNewItemModal: false,
 			items: [],
-			quantities: []
+            quantities: [],
+            loading: true
         };
     }
 
@@ -33,7 +35,7 @@ class AddItem extends React.Component {
 								if (quant.storeId === parseInt(storeId)) {
 									temp_quants[item.itemId] = quant;
 									temp_checkedItems.push(item.itemId);
-								}
+                                }
 							});
 
 							temp_items.push(item);
@@ -137,9 +139,12 @@ class AddItem extends React.Component {
 				temp_checkedItems.push(this.checkedItems[i]);
 			}
 		}
-		if (!found) {
-			temp_checkedItems.push(itemId);
-		}
+        if (!found) {
+            temp_checkedItems.push(itemId);
+        }
+        else {
+            this.removeItems.push(itemId);
+        }
 		this.checkedItems = temp_checkedItems;
 	};
 
@@ -160,7 +165,22 @@ class AddItem extends React.Component {
 						})
 					});
 			}
-		});
+        });
+        await this.removeItems.forEach(async (itemId) => {
+            await fetch(`${apiAddress}/api/ItemQuantities/${this.state.quantities[itemId].itemQuantityId}`,
+                {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        "itemQuantityId": this.state.quantities[itemId].itemQuantityId,
+                        "itemId": itemId,
+                        "storeId": parseInt(getCookie("storeId")),
+                        "amount": this.state.quantities[itemId].amount,
+                        "moderateLevel": this.state.quantities[itemId].moderateLevel,
+                        "urgentLevel": this.state.quantities[itemId].urgentLevel
+                    })
+                });
+        });
 		this.props.history.push('/inventory-form');
 	};
 }
