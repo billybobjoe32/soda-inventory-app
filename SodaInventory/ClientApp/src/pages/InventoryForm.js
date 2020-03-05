@@ -10,8 +10,7 @@ class InventoryForm extends Component {
 		super(props);
 		this.state = {
 			items: [],
-            quantities: [],
-            amounts: [],
+            inputs: [],
             isValid: true
 		}
 	}
@@ -21,63 +20,110 @@ class InventoryForm extends Component {
     }
 
     getInventory = () => {
-        fetch(apiAddress + '/api/Items?companyId=' + getCookie("companyId"))
+        let temp_items = [];
+
+        fetch(apiAddress + '/api/Inventory?storeId=' + getCookie("storeId"))
             .then(results => { return results.json(); })
             .then(data => {
-                let temp_items = [];
-                let temp_quants = [];
-                let temp_amounts = [];
-
-                data.forEach((item) => {
-                    fetch(apiAddress + '/api/ItemQuantities?itemId=' + item.itemId)
-                        .then(results => { return results.json(); })
-                        .then(data => {
-                            data.forEach((quant) => {
-                                if (quant.storeId === parseInt(getCookie("storeId"))) {
-                                    temp_items.push(item);
-                                    temp_quants[item.itemId] = quant;
-                                    temp_amounts[item.itemId] = Number(quant.amount);
-                                }
-                            });
-                        })
-                        .then(() => {
-							temp_items.sort((a, b) => a.itemName.localeCompare(b.itemName));
-                            this.setState({
-                                items: temp_items,
-                                quantities: temp_quants,
-                                amounts: temp_amounts
-                            });
-                        })
-                });
+                this.setState({
+                    items: data
+                })
             })
     }
 
+    
     clear = () => {
         this.setState({
             items: [],
-            quantities: [],
-            amounts: []
+            inputs: []
         });
-        this.getInventory();
     }
 
     updateInventory = () => {
-		this.state.quantities.forEach(quant => {
-			fetch(apiAddress + '/api/ItemQuantities/' + quant.itemQuantityId,
+        this.state.items.forEach((item) => {
+            fetch(apiAddress + '/api/ItemQuantities/' + item.itemQuantityId,
 				{
 					method: 'PUT',
 					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({
-						"itemQuantityId": quant.itemQuantityId,
-						"itemId": quant.itemId,
-						"storeId": quant.storeId,
-						"amount": Number(quant.amount),
-						"moderateLevel": quant.moderateLevel,
-						"urgentLevel": quant.urgentLevel,
+                    body: JSON.stringify({
+                        "itemQuantityId": item.itemQuantityId,
+                        "itemId": item.itemId,
+                        "storeId": item.storeId,
+                        "amount": this.state.inputs[item.itemId],
+                        "moderateLevel": item.moderateLevel,
+                        "urgentLevel": item.urgentLevel,
+                        "lastUpdated": item.lastUpdated
 					})
                 })
         });
-	};
+    };
+
+    populateFields(items) {
+        let list = [];
+        this.getInventory();
+        items.forEach((item) => {
+            list.push(
+                <div key={item.itemId} className='p-3'>
+                    <Grid.Row style={{ marginBottom: 20 }}>
+                        <Grid.Column style={{ width: '50%' }}>
+                            <Grid.Row>
+                                <h3 style={{ textAlign: "left", paddingLeft: 44 }}>{item.itemName}</h3>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <h6 style={{ textAlign: "left", paddingLeft: 44 }}>Current: {item.amount} {item.uom}</h6>
+                            </Grid.Row>
+                        </Grid.Column>
+                        <Grid.Column style={{ width: '50%', textAlign: 'left', paddingLeft: 20 }}>
+                            <Grid.Row>
+                                <Form.Input style={{ maxWidth: 65 }}
+                                    onChange={(e) => {
+                                        let temp_inputs = this.state.inputs;
+                                        temp_inputs[item.itemId] = e.target.value;
+                                        this.setState({
+                                            inputs: temp_inputs
+                                        });
+                                    }} />
+                                <h4 style={{ paddingLeft: 10, paddingTop: 5 }}>{item.uom}</h4>
+                            </Grid.Row>
+                        </Grid.Column>
+                    </Grid.Row>
+                    <div className="ui section divider" />
+                </div>
+            );
+        });
+
+        return list;
+    }
+
+
+    getDate(items) {
+        const months = { "01": "January", "02": "February", "03": "March", "04": "April", "05": "May", "06": "June", "07": "July", "08": "August", "09": "September", "10": "October", "11": "November", "12": "December" };
+        let chosenDate = "";
+        let dates = [];
+
+        items.forEach(item => {
+            dates.push(new Date(item.lastUpdated.substring(0, 10)).toJSON().slice(0,10));
+        });
+
+        let earliest = dates[0];
+        for (let date of dates) {
+            if (date < earliest) {
+                earliest = date;
+            }
+        }
+
+        chosenDate = earliest;
+        if (chosenDate !== undefined) {
+            let month = months[chosenDate.substring(5, 7)];
+            let day = parseInt(chosenDate.substring(8, 10));
+            let year = chosenDate.substring(0, 4);
+
+            return `${month} ${day}, ${year}`;
+        }
+        else {
+            return "";
+        }
+    }
 
     render() {
 		return (
@@ -87,48 +133,22 @@ class InventoryForm extends Component {
 					<Header as='h3'>
 						<Icon name='clipboard check' circular />
 						<Header.Content>Take Inventory
-                            <Header.Subheader style={{ color: 'red' }}>Inventory levels as of November 1st,
-                                2019</Header.Subheader>
+                            <Header.Subheader style={{ color: 'red' }}>Inventory levels as of {this.getDate(this.state.items)}</Header.Subheader>
 						</Header.Content>
 					</Header>
 					<div className="ui section divider" />
 					<Grid textAlign='center' verticalAlign='middle' >
 						<Grid.Column style={{ width: '100%', maxWidth: 650 }}>
 							<Form>
-								{this.state.items.map((item) =>
-									<div key={item.itemId} className='p-3'>
-										<Grid.Row style={{ marginBottom: 20 }}>
-											<Grid.Column style={{ width: '50%' }}>
-												<Grid.Row>
-													<h3 style={{ textAlign: "left", paddingLeft: 44 }}>{item.itemName}</h3>
-												</Grid.Row>
-												<Grid.Row>
-													<h6 style={{ textAlign: "left", paddingLeft: 44 }}>Current: {this.state.amounts[item.itemId]} {item.units}</h6>
-												</Grid.Row>
-											</Grid.Column>
-											<Grid.Column style={{ width: '50%', textAlign: 'left', paddingLeft: 20 }}>
-												<Grid.Row>
-                                                    <Form.Input style={{ maxWidth: 65 }}
-                                                        onChange={(e) => {
-                                                            let quants = this.state.quantities.slice();
-                                                            quants[item.itemId].amount = e.target.value;
-                                                            this.setState({ quantities: quants });
-                                                        }} />
-													<h4 style={{ paddingLeft: 10, paddingTop: 5 }}>{item.units}</h4>
-												</Grid.Row>
-											</Grid.Column>
-										</Grid.Row>
-										<div className="ui section divider" />
-									</div>
-								)}
+                                {this.populateFields(this.state.items)}
 
                                 <Grid.Row>
                                     <Grid.Column style={{ width: '50%' }}>
-                                        <Button primary circular icon="add" onClick={() => this.redirectToAddItem()}
+                                        <Button primary circular icon="add" onClick={() => { this.clear(); this.redirectToAddItem(); }}
                                             style={{ float: 'left', marginLeft: 50 }}></Button>
                                     </Grid.Column>
                                     <Grid.Column style={{ width: '50%' }}>
-                                        <Button primary onClick={() => { this.updateInventory(); this.getInventory(); this.clear(); }}
+                                        <Button primary onClick={() => { this.updateInventory(); this.clear(); this.getInventory(); }}
                                             style={{ float: 'left', marginLeft: 5}}>Save</Button>
                                     </Grid.Column>
                                 </Grid.Row>
