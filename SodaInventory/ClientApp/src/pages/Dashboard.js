@@ -61,6 +61,38 @@ class Dashboard extends Component {
         return cells;
     };
 
+    getDate(good, moderate, urgent) {
+        let items = [];
+        items = items.concat(good, moderate, urgent);
+
+        const months = { "01": "January", "02": "February", "03": "March", "04": "April", "05": "May", "06": "June", "07": "July", "08": "August", "09": "September", "10": "October", "11": "November", "12": "December" };
+        let chosenDate = "";
+        let dates = [];
+
+        items.forEach(item => {
+            dates.push(new Date(item.lastUpdated.substring(0, 10)).toJSON().slice(0, 10));
+        });
+
+        let earliest = dates[0];
+        for (let date of dates) {
+            if (date < earliest) {
+                earliest = date;
+            }
+        }
+
+        chosenDate = earliest;
+        if (chosenDate !== undefined) {
+            let month = months[chosenDate.substring(5, 7)];
+            let day = parseInt(chosenDate.substring(8, 10));
+            let year = chosenDate.substring(0, 4);
+
+            return `${month} ${day}, ${year}`;
+        }
+        else {
+            return "";
+        }
+    }
+
     render() {
         let tableHeader =
             <TableHeader>
@@ -113,8 +145,7 @@ class Dashboard extends Component {
                     <Header as='h3'>
                         <Icon name='clipboard list' circular/>
                         <Header.Content>Inventory Quantities
-                            <Header.Subheader style={{color: 'red'}}>Inventory levels as of November 1st,
-                                2019</Header.Subheader>
+                            <Header.Subheader style={{ color: 'red' }}>Inventory levels as of {this.getDate(this.state.good, this.state.moderate, this.state.urgent)}</Header.Subheader>
                         </Header.Content>
                     </Header>
                     <Grid columns={1}>
