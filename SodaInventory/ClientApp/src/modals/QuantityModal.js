@@ -7,9 +7,9 @@ class QuantityModal extends Component {
         return (
             <div>
                 <Modal open={this.props.showModal} onClose={this.props.closeModal} size="mini" closeIcon>
-                    <ModalHeader>Adjust Inventory</ModalHeader>
+                    <ModalHeader>Adjust Inventory: {this.props.item.itemName}</ModalHeader>
                     <ModalContent>
-                        <h5>Current Inventory: <span className="font-weight-bold">10 Units</span></h5>
+                        <h5>Current Inventory: <span className="font-weight-bold">{this.props.item.amount} {this.props.item.uom}</span></h5>
                         <Form>
                             <FormInput label="Quantity" />
                         </Form>
@@ -26,7 +26,8 @@ class QuantityModal extends Component {
 
 QuantityModal.propTypes = {
     showModal: PropTypes.bool,
-    closeModal: PropTypes.func
+    closeModal: PropTypes.func,
+    item: PropTypes.object
 };
 
 export default QuantityModal;
