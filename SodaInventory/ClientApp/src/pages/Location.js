@@ -53,10 +53,10 @@ class Location extends Component {
 		let list = [];
 		data.forEach((item) => {
 			list.push(
-				<Card key={item.storeId} fluid color={this.state.selectedStoreId == item.storeId ? 'green' : 'black'}
+				<Card key={item.storeId} fluid color={this.state.selectedStoreId === item.storeId ? 'green' : 'black'}
 					onClick={(e) => this.setStoreCookies(e, item.storeId, item.storeName)}>
 					<Card.Content>
-						<Button primary style={{ float: 'right' }} icon='edit' className='mt-1'
+						<Button primary style={{ float: 'right' }} icon='edit' className='mt-1 edit'
 							onClick={() => this.showModal(item.storeId)} />
 						<Card.Header>{item.storeName}</Card.Header>
 						<Card.Meta>{item.streetAddress} {item.city}, {item.state} {item.zipCode}</Card.Meta>
