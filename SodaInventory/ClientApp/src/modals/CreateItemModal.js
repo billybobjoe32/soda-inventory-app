@@ -65,8 +65,15 @@ class CreateItemModal extends Component {
         }
     };
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.editItemId) {
+            this.loadData();
+        }
+    }
+
     clearModal = () => {
         this.setState({
+            itemId: 0,
             name: '',
             units: '',
             moderateLevel: '',
@@ -74,6 +81,22 @@ class CreateItemModal extends Component {
             isValid: true
         })
     };
+
+    loadData = () => {
+        fetch(`${apiAddress}/api/Items/${this.props.editItemId}`)
+            .then(response => response.json())
+            .then(data => {
+                this.setState({
+                    itemId: data.itemId,
+                    name: data.itemName,
+                    units: data.units,
+                    moderateLevel: data.moderateLevel,
+                    urgentLevel: data.urgentLevel,
+                })
+                this.props.clearRequest();
+            })
+
+    }
 
     render() {
         const {name, units, moderateLevel, urgentLevel} = this.state;
@@ -137,6 +160,8 @@ class CreateItemModal extends Component {
 CreateItemModal.propsTypes = {
     showModal: PropTypes.bool,
     closeModal: PropTypes.func,
+    editItemId: PropTypes.number,
+    clearRequest: PropTypes.func,
 };
 
 export default CreateItemModal;
