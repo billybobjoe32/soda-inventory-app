@@ -19,6 +19,16 @@ namespace SodaInventory.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        [Route("GetSpecificInventoryItem")]
+        public async Task<ActionResult<InventoryEntry>> GetSpecificInventoryItem(int storeId, int itemId)
+        {
+            Item item = await _context.Items.FindAsync(itemId);
+            List<ItemQuantity> iq = await _context.ItemQuantities.Where(iq => iq.ItemId == itemId && iq.StoreId == storeId).ToListAsync();
+            if (iq.Count == 0 || item == null) return null;
+            return new InventoryEntry(item, iq[0]);
+        }
+
         // GET: api/GetInventory
         [HttpGet]
         public async Task<ActionResult<IEnumerable<object>>> GetInventory(int storeId)
