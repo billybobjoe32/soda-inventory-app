@@ -30,9 +30,6 @@ class ItemModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            item: "cups",
-            qty: 10,
-            uom: "units",
             showAdjustInventoryModal: false,
         };
     }
@@ -59,13 +56,13 @@ class ItemModal extends Component {
 
         return (
             <div>
-                <QuantityModal showModal={this.state.showAdjustInventoryModal} closeModal={this.closeModal} />
+                <QuantityModal item={this.props.item} showModal={this.state.showAdjustInventoryModal} closeModal={this.closeModal} />
                 <Modal open={this.props.showModal} onClose={this.props.closeModal} size={'large'} closeIcon>
                     <ModalHeader>Item</ModalHeader>
                     <ModalContent scrolling>
                         <Header as='h2'>
                             <Icon name='box' circular/>
-                            <Header.Content>Cups - <span style={{fontStyle: 'italic'}}>10 Units in stock</span>
+                            <Header.Content>{this.props.item.itemName} - <span style={{fontStyle: 'italic'}}>{this.props.item.amount} {this.props.item.uom} in stock</span>
                                 <Header.Subheader>
                                     Level: <span style={{color: 'red'}}>Urgent</span>
                                 </Header.Subheader>
@@ -105,6 +102,7 @@ class ItemModal extends Component {
 ItemModal.propTypes = {
     showModal: PropTypes.bool,
     closeModal: PropTypes.func,
+    item: PropTypes.object
 };
 
 export default ItemModal;

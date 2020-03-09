@@ -28,6 +28,7 @@ class Dashboard extends Component {
             urgent: [],
             moderate: [],
             good: [],
+            selectedItem: {}
         }
     }
 
@@ -51,7 +52,10 @@ class Dashboard extends Component {
         let cells = [];
         data.forEach((element) => {
             cells.push(
-                <TableRow key={element.itemId} onClick={() => this.setState({showItemModal: true})} >
+                <TableRow key={element.itemId} onClick={() => this.setState({
+                    showItemModal: true,
+                    selectedItem: element
+                })} >
                     <TableCell>{element.itemName}</TableCell>
                     <TableCell>{element.amount} ({element.uom})</TableCell>
                 </TableRow>
@@ -139,7 +143,7 @@ class Dashboard extends Component {
         const color = this.state.currentIndexColor;
         return (
             <div>
-                <ItemModal showModal={this.state.showItemModal} closeModal={this.closeModal} />
+                <ItemModal item={this.state.selectedItem} showModal={this.state.showItemModal} closeModal={this.closeModal} />
                 <Header as='h2' attached='top'>Dashboard</Header>
                 <Segment attached>
                     <Header as='h3'>
