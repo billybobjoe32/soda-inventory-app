@@ -63,7 +63,7 @@ class AddLocationModal extends Component {
                     <ModalContent scrolling>
                         <Header as='h2'>
                             <Icon name='building outline' circular/>
-                            <Header.Content>Add Store</Header.Content>
+                            <Header.Content>{this.state.storeId === '' ? "Add Store" : "Edit Store"}</Header.Content>
                         </Header>
                         <Segment attached>
                             <Form className={this.state.isValid ? '' : 'error'}>
@@ -106,7 +106,7 @@ class AddLocationModal extends Component {
                         <Button primary onClick={() => {
                             if (this.validate())
                                 this.addLocation();
-                        }}> Add Location</Button>
+                        }}>{this.state.storeId === '' ? "Add Store" : "Save Changes"}</Button>
                     </ModalActions>
                 </Modal>
             </div>
