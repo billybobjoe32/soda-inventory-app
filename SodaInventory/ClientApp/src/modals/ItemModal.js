@@ -24,6 +24,7 @@ import {
     YAxis
 } from "recharts";
 import QuantityModal from "./QuantityModal";
+import AddItem from "./CreateItemModal";
 
 class ItemModal extends Component {
 
@@ -34,12 +35,27 @@ class ItemModal extends Component {
             qty: 10,
             uom: "units",
             showAdjustInventoryModal: false,
+            showItemModal: false,
+            showCreateItemModal: false,
+            editItemId: null
         };
     }
 
     closeModal = () => {
-        this.setState({showAdjustInventoryModal: false});
+        this.setState({ showAdjustInventoryModal: false });
+        this.setState({ showItemModal: false })
     };
+
+    showModal = (editItemId) => {
+        this.setState({
+            editItemId: editItemId,
+            showCreateItemModal: true
+        })
+    };
+
+    clearRequest = () => {
+        this.setState({ editItemId: null })
+    }
 
     render() {
 
@@ -60,6 +76,8 @@ class ItemModal extends Component {
         return (
             <div>
                 <QuantityModal showModal={this.state.showAdjustInventoryModal} closeModal={this.closeModal} />
+                <AddItem showModal={this.state.showItemModal} editItemId={this.state.editItemId}
+                    closeModal={this.closeModal} clearRequest={this.clearRequest} />
                 <Modal open={this.props.showModal} onClose={this.props.closeModal} size={'large'} closeIcon>
                     <ModalHeader>Item</ModalHeader>
                     <ModalContent scrolling>
@@ -93,7 +111,8 @@ class ItemModal extends Component {
                         </Segment>
                     </ModalContent>
                     <ModalActions style={{justifyContent: 'space-between'}}>
-                        <Button primary>Edit Item Details<Icon className="pl-3" name='pencil alternate'/></Button>
+                        {/*<Button primary>Edit Item Details<Icon className="pl-3" name='pencil alternate'/></Button>*/}
+                        <Button primary onClick={() => this.setState({ showItemModal: true })}>Edit Item Details<Icon className="pl-3" name='pencil alternate' /></Button>
                         <Button secondary onClick={() => this.setState({showAdjustInventoryModal: true})}>Adjust Inventory<Icon name='chevron right'/></Button>
                     </ModalActions>
                 </Modal>
