@@ -41,22 +41,40 @@ class InventoryForm extends Component {
 
     updateInventory = () => {
         this.state.items.forEach((item) => {
-            fetch(apiAddress + '/api/ItemQuantities/' + item.itemQuantityId,
-				{
-					method: 'PUT',
-					headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        "itemQuantityId": item.itemQuantityId,
-                        "itemId": item.itemId,
-                        "storeId": item.storeId,
-                        "amount": this.state.inputs[item.itemId],
-                        "moderateLevel": item.moderateLevel,
-                        "urgentLevel": item.urgentLevel,
-                        "lastUpdated": item.lastUpdated
-					})
-                })
+            if (this.state.inputs[item.itemId] !== undefined) {
+                fetch(apiAddress + '/api/ItemQuantities/' + item.itemQuantityId,
+                    {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            "itemQuantityId": item.itemQuantityId,
+                            "itemId": item.itemId,
+                            "storeId": item.storeId,
+                            "amount": this.state.inputs[item.itemId],
+                            "moderateLevel": item.moderateLevel,
+                            "urgentLevel": item.urgentLevel,
+                            "lastUpdated": this.newDate()
+                        })
+                    })
+            }
         });
     };
+
+    newDate = () => {
+        let today = new Date();
+
+        let year = today.getFullYear().toString();
+        let month = today.getMonth() + 1;
+        month = month.toString();
+        let day = today.getDate().toString();
+
+        if (day.length < 2)
+            day = "0" + day;
+        if (month.length < 2)
+            month = "0" + month;
+
+        return `${year}-${month}-${day}`;
+    }
 
     populateFields(items) {
         let list = [];
@@ -107,7 +125,7 @@ class InventoryForm extends Component {
 
         let earliest = dates[0];
         for (let date of dates) {
-            if (date < earliest) {
+            if (date > earliest) {
                 earliest = date;
             }
         }
