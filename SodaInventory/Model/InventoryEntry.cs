@@ -18,6 +18,20 @@ namespace SodaInventory.Model
 		public decimal UrgentLevel;
 		public DateTime? LastUpdated;
 
+		public InventoryEntry(Item item, ItemQuantity iq)
+		{
+			this.CompanyId = item.CompanyId;
+			this.StoreId = iq.StoreId;
+			this.ItemId = item.ItemId;
+			this.ItemName = item.ItemName;
+			this.Uom = item.Units;
+			this.ItemQuantityId = iq.ItemQuantityId;
+			this.Amount = iq.Amount;
+			this.ModerateLevel = iq.ModerateLevel;
+			this.UrgentLevel = iq.UrgentLevel;
+			this.LastUpdated = iq.LastUpdated;
+		}
+
 		public ItemQuantity ToItemQuantity()
 		{
 			return new ItemQuantity
