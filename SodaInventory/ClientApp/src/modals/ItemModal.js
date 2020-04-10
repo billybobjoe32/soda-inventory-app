@@ -34,7 +34,8 @@ class ItemModal extends Component {
             showAdjustInventoryModal: false,
             showItemModal: false,
             showCreateItemModal: false,
-            editItemId: null
+            editItemId: null,
+            editItemQuantityId
         };
     }
 
@@ -43,15 +44,16 @@ class ItemModal extends Component {
         this.setState({ showItemModal: false })
     };
 
-    showModal = (editItemId) => {
+    showModal = (editItemId, editItemQuantityId) => {
         this.setState({
             editItemId: editItemId,
+            editItemQuantityId: editItemQuantityId,
             showCreateItemModal: true
         })
     };
 
     clearRequest = () => {
-        this.setState({ editItemId: null })
+        this.setState({ editItemId: null, editItemQuantityId: null })
     }
 
     render() {
@@ -108,7 +110,7 @@ class ItemModal extends Component {
                         </Segment>
                     </ModalContent>
                     <ModalActions style={{justifyContent: 'space-between'}}>
-                        <Button primary onClick={() => this.setState({ showItemModal: true })}>Edit Item Details<Icon className="pl-3" name='pencil alternate' /></Button>
+                        <Button primary onClick={() => this.showModal(21, 19)}>Edit Item Details<Icon className="pl-3" name='pencil alternate' /></Button>
                         <Button secondary onClick={() => this.setState({showAdjustInventoryModal: true})}>Adjust Inventory<Icon name='chevron right'/></Button>
                     </ModalActions>
                 </Modal>

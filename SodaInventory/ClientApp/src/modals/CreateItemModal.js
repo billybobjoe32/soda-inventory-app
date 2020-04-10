@@ -18,36 +18,41 @@ class CreateItemModal extends Component {
         }
     }
 
-	addItem = async () => {
-		var results = await fetch(apiAddress + '/api/Items',
-			{
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					"itemId": 0,
-					"companyId": parseInt(getCookie("companyId")),
-					"itemName": this.state.name,
-					"units": this.state.units,
-					"itemAlerts": [],
-					"itemQuantities": []
-				})
-			}
-		);
-		var json = await results.json();
-		var itemId = json.itemId;
-		await fetch(apiAddress + '/api/ItemQuantities',
-			{
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					"itemQuantityId": 0,
-					"itemId": itemId,
-					"storeId": parseInt(getCookie("storeId")),
-					"amount": 0,
-					"moderateLevel": parseFloat(this.state.moderateLevel),
-					"urgentLevel": parseFloat(this.state.urgentLevel)
-				})
-			}).then(this.clearModal()).then(() => this.props.closeModal());
+    addItem = async () => {
+        if (this.state.itemId > 0) {
+
+        }
+        else {
+            var results = await fetch(apiAddress + '/api/Items',
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        "itemId": 0,
+                        "companyId": parseInt(getCookie("companyId")),
+                        "itemName": this.state.name,
+                        "units": this.state.units,
+                        "itemAlerts": [],
+                        "itemQuantities": []
+                    })
+                }
+            );
+            var json = await results.json();
+            var itemId = json.itemId;
+            await fetch(apiAddress + '/api/ItemQuantities',
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        "itemQuantityId": 0,
+                        "itemId": itemId,
+                        "storeId": parseInt(getCookie("storeId")),
+                        "amount": 0,
+                        "moderateLevel": parseFloat(this.state.moderateLevel),
+                        "urgentLevel": parseFloat(this.state.urgentLevel)
+                    })
+                }).then(this.clearModal()).then(() => this.props.closeModal());
+        }
     };
 
     validate = () => {
@@ -83,7 +88,8 @@ class CreateItemModal extends Component {
     };
 
     loadData = () => {
-        fetch(`${apiAddress}/api/Items/${this.props.editItemId}`)
+        var store = getCookie("storeId");
+        fetch(`${apiAddress}/api/Inventory/GetSpecificInventoryItem?storeId=${store}&itemId=${this.props.editItemId}`)
             .then(response => response.json())
             .then(data => {
                 this.setState({

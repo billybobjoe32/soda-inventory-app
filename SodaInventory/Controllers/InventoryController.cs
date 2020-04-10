@@ -29,6 +29,47 @@ namespace SodaInventory.Controllers
             return new InventoryEntry(item, iq[0]);
         }
 
+        [HttpPut]
+        [Route("UpdateItemInfo")]
+        public async Task<IActionResult> UpdateItemInfo(InventoryEntry ie)
+        {
+            if (ie.ItemId == 0 && ie.ItemQuantityId == 0) return BadRequest();
+
+            Item currentItem = await _context.Items.FindAsync(ie.ItemId);
+            ItemQuantity currentIq = await _context.ItemQuantities.FindAsync(ie.ItemQuantityId);
+
+            if (currentItem == null || currentIq == null) return NotFound();
+
+            Item postedItem = ie.ToItem();
+            postedItem.CompanyId = currentItem.CompanyId;
+            _context.Entry(postedItem).State = EntityState.Modified;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            ItemQuantity postedQuantity = ie.ToItemQuantity();
+            postedQuantity.Amount = currentIq.Amount;
+            postedQuantity.LastUpdated = currentIq.LastUpdated;
+            postedQuantity.ItemId = currentIq.ItemId;
+            postedQuantity.StoreId = currentIq.StoreId;
+
+            _context.Entry(postedQuantity).State = EntityState.Modified;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return NoContent();
+        }
+
         // GET: api/GetInventory
         [HttpGet]
         public async Task<ActionResult<IEnumerable<object>>> GetInventory(int storeId)
