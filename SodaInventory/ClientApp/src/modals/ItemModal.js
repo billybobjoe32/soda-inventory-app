@@ -34,26 +34,25 @@ class ItemModal extends Component {
             showAdjustInventoryModal: false,
             showItemModal: false,
             showCreateItemModal: false,
-            editItemId: null,
-            editItemQuantityId
+            editItemId: null
         };
     }
 
     closeModal = () => {
         this.setState({ showAdjustInventoryModal: false });
-        this.setState({ showItemModal: false })
+        this.setState({ showItemModal: false });
+        this.setState({ showCreateItemModal: false });
     };
 
-    showModal = (editItemId, editItemQuantityId) => {
+    showModal = (editItemId) => {
         this.setState({
-            editItemId: editItemId,
-            editItemQuantityId: editItemQuantityId,
+            editItemId: this.props.item.itemId,
             showCreateItemModal: true
         })
     };
 
     clearRequest = () => {
-        this.setState({ editItemId: null, editItemQuantityId: null })
+        this.setState({ editItemId: null })
     }
 
     render() {
@@ -75,7 +74,7 @@ class ItemModal extends Component {
         return (
             <div>
                 <QuantityModal item={this.props.item} showModal={this.state.showAdjustInventoryModal} closeModal={this.closeModal} />
-                <AddItem showModal={this.state.showItemModal} editItemId={this.state.editItemId}
+                <AddItem showModal={this.state.showCreateItemModal} editItemId={this.state.editItemId}
                     closeModal={this.closeModal} clearRequest={this.clearRequest} />
                 <Modal open={this.props.showModal} onClose={this.props.closeModal} size={'large'} closeIcon>
                     <ModalHeader>Item</ModalHeader>
@@ -110,7 +109,7 @@ class ItemModal extends Component {
                         </Segment>
                     </ModalContent>
                     <ModalActions style={{justifyContent: 'space-between'}}>
-                        <Button primary onClick={() => this.showModal(21, 19)}>Edit Item Details<Icon className="pl-3" name='pencil alternate' /></Button>
+                        <Button primary onClick={() => this.showModal(this.props.item.itemId)}>Edit Item Details<Icon className="pl-3" name='pencil alternate' /></Button>
                         <Button secondary onClick={() => this.setState({showAdjustInventoryModal: true})}>Adjust Inventory<Icon name='chevron right'/></Button>
                     </ModalActions>
                 </Modal>

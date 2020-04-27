@@ -13,14 +13,29 @@ class CreateItemModal extends Component {
             units: '',
             moderateLevel: '',
 			urgentLevel: '',
-			itemId: 0,
+            itemId: 0,
+            itemQuantityId: 0,
             isValid: true
         }
     }
 
     addItem = async () => {
         if (this.state.itemId > 0) {
-
+            var results = await fetch(apiAddress + '/api/Inventory/UpdateItemInfo',
+                {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        "itemId": this.state.itemId,
+                        "companyId": parseInt(getCookie("companyId")),
+                        "itemName": this.state.name,
+                        "storeId": parseInt(getCookie("storeId")),
+                        "units": this.state.units,
+                        "moderateLevel": parseFloat(this.state.moderateLevel),
+                        "urgentLevel": parseFloat(this.state.urgentLevel)
+                    })
+                }
+            );
         }
         else {
             var results = await fetch(apiAddress + '/api/Items',
@@ -94,8 +109,9 @@ class CreateItemModal extends Component {
             .then(data => {
                 this.setState({
                     itemId: data.itemId,
+                    itemQuantityId: data.itemQuantityId,
                     name: data.itemName,
-                    units: data.units,
+                    units: data.uom,
                     moderateLevel: data.moderateLevel,
                     urgentLevel: data.urgentLevel,
                 })

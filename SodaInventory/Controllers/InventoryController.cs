@@ -33,39 +33,49 @@ namespace SodaInventory.Controllers
         [Route("UpdateItemInfo")]
         public async Task<IActionResult> UpdateItemInfo(InventoryEntry ie)
         {
-            if (ie.ItemId == 0 && ie.ItemQuantityId == 0) return BadRequest();
+            if (ie.ItemId == 0 || ie.StoreId == 0) return BadRequest();
 
             Item currentItem = await _context.Items.FindAsync(ie.ItemId);
-            ItemQuantity currentIq = await _context.ItemQuantities.FindAsync(ie.ItemQuantityId);
+            List<ItemQuantity> currentIqs = await _context.ItemQuantities.Where(iq => iq.ItemId == ie.ItemId && iq.StoreId == ie.StoreId).ToListAsync();
 
-            if (currentItem == null || currentIq == null) return NotFound();
+            if (currentItem == null || currentIqs.Count == 0) return NotFound();
 
             Item postedItem = ie.ToItem();
             postedItem.CompanyId = currentItem.CompanyId;
+            postedItem.ItemQuantities = currentItem.ItemQuantities;
             _context.Entry(postedItem).State = EntityState.Modified;
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
-                throw;
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
 
+            ie.ItemQuantityId = currentIqs[0].ItemQuantityId;
+            ItemQuantity currentIq = currentIqs[0];
             ItemQuantity postedQuantity = ie.ToItemQuantity();
             postedQuantity.Amount = currentIq.Amount;
             postedQuantity.LastUpdated = currentIq.LastUpdated;
             postedQuantity.ItemId = currentIq.ItemId;
-            postedQuantity.StoreId = currentIq.StoreId;
 
             _context.Entry(postedQuantity).State = EntityState.Modified;
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
-                throw;
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
             return NoContent();
         }
