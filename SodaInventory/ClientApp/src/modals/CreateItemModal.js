@@ -30,12 +30,12 @@ class CreateItemModal extends Component {
                         "companyId": parseInt(getCookie("companyId")),
                         "itemName": this.state.name,
                         "storeId": parseInt(getCookie("storeId")),
-                        "units": this.state.units,
+                        "uom": this.state.units,
                         "moderateLevel": parseFloat(this.state.moderateLevel),
                         "urgentLevel": parseFloat(this.state.urgentLevel)
                     })
                 }
-            );
+            ).then(this.clearModal()).then(() => this.props.closeModal());
         }
         else {
             var results = await fetch(apiAddress + '/api/Items',

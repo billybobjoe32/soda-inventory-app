@@ -43,6 +43,7 @@ namespace SodaInventory.Controllers
             Item postedItem = ie.ToItem();
             postedItem.CompanyId = currentItem.CompanyId;
             postedItem.ItemQuantities = currentItem.ItemQuantities;
+            _context.Entry(currentItem).State = EntityState.Detached;
             _context.Entry(postedItem).State = EntityState.Modified;
             try
             {
@@ -64,6 +65,7 @@ namespace SodaInventory.Controllers
             postedQuantity.LastUpdated = currentIq.LastUpdated;
             postedQuantity.ItemId = currentIq.ItemId;
 
+            _context.Entry(currentIq).State = EntityState.Detached;
             _context.Entry(postedQuantity).State = EntityState.Modified;
             try
             {
@@ -132,10 +134,8 @@ namespace SodaInventory.Controllers
         [HttpPost]
         public async Task<ActionResult<InventoryEntry>> PostInventoryEntry(InventoryEntry ie)
         {
-            bool itemCreated = false;
             if (ie.ItemId == 0)
             {
-                itemCreated = true;
                 _context.Items.Add(ie.ToItem());
                 await _context.SaveChangesAsync();
             }
@@ -169,7 +169,6 @@ namespace SodaInventory.Controllers
             }
             if (ie.ItemQuantityId == 0)
             {
-                itemCreated = true;
                 _context.ItemQuantities.Add(ie.ToItemQuantity());
                 await _context.SaveChangesAsync();
             }
