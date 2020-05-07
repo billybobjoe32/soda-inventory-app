@@ -13,7 +13,7 @@ namespace SodaInventory.Model
     public class Emailer
     {
         private const string SMTP_USER = "sodarushdev@gmail.com";
-        private const string SMTP_PASS = "sodarushdevmail";
+        private const string SMTP_PASS = "tvdbxivnuozcafdp";
 
         public Emailer()
         {
