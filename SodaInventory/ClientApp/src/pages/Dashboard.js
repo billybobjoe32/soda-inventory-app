@@ -74,7 +74,9 @@ class Dashboard extends Component {
         let dates = [];
 
         items.forEach(item => {
-            dates.push(new Date(item.lastUpdated.substring(0, 10)).toJSON().slice(0, 10));
+            if (item.lastUpdated) {
+                dates.push(new Date(item.lastUpdated.substring(0, 10)).toJSON().slice(0, 10));
+            }
         });
 
         let earliest = dates[0];
